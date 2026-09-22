@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Valores de prueba: el sitio se construye contra el servidor local del pipeline.
+  # El dominio real es un pendiente de lanzamiento (Parte A §11).
+  NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3100
+
+jobs:
+  verificar:
+    name: lint · typecheck · pruebas · build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Orden del pipeline según B.16
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Pruebas unitarias
+        run: pnpm test:unit
+
+      - name: Build
+        run: pnpm build
+
+      - name: Instalar navegador
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Pruebas e2e
+        run: pnpm test:e2e
+
+      - name: Pruebas de accesibilidad
+        run: pnpm test:a11y
+
+      # Lighthouse CI con los umbrales de B.12 entra en F6.
+
+      - name: Reporte de Playwright
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  dependencias:
+    name: auditoría de dependencias
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # B.11: pnpm audit en CI, con Dependabot semanal como complemento.
+      - name: pnpm audit
+        run: pnpm audit --audit-level high

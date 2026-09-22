@@ -1,0 +1,53 @@
+/* Tokens de color — Parte A §2.1 y Parte B §B.3.
+   Cada color saturado tiene un solo significado: firmar, tachar, agregar.
+   Estos son los únicos hex del proyecto: ningún componente escribe color a mano. */
+
+:root,
+[data-tema='papel'] {
+  --papel: #f5f0e8;
+  --papel-2: #ede8e0;
+  --tinta: #0d1b2a;
+  --grafito: #2a2a2a;
+  --lapiz: #5a6778;
+  --carbon: #3d3d3d;
+  --firma: #2340c8;
+  --texto-sobre-firma: #f5f0e8;
+  --tachado: #9b2f24;
+  --agregado: #2e6a4a;
+
+  color-scheme: light;
+}
+
+[data-tema='plano'] {
+  --papel: #0d1b2a;
+  --papel-2: #13253a;
+  --tinta: #f5f0e8;
+  --grafito: #f5f0e8;
+  --lapiz: #9aa6b5;
+  --carbon: #c9ced6;
+  --firma: #8fa2ff;
+  --texto-sobre-firma: #0d1b2a;
+  --tachado: #e08a7e;
+  --agregado: #7fc49a;
+
+  color-scheme: dark;
+}
+
+/* Sin JavaScript el tema inicial sigue a `prefers-color-scheme` (B.3).
+   Con JavaScript, `ScriptTema` fija `data-tema` antes del primer pintado. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema='papel']) {
+    --papel: #0d1b2a;
+    --papel-2: #13253a;
+    --tinta: #f5f0e8;
+    --grafito: #f5f0e8;
+    --lapiz: #9aa6b5;
+    --carbon: #c9ced6;
+    --firma: #8fa2ff;
+    --texto-sobre-firma: #0d1b2a;
+    --tachado: #e08a7e;
+    --agregado: #7fc49a;
+
+    color-scheme: dark;
+  }
+}

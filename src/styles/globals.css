@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+/* Los tokens se exponen a Tailwind v4 con @theme (B.3).
+   `inline` porque el valor real vive en la variable CSS y cambia con el tema. */
+@theme inline {
+  --color-papel: var(--papel);
+  --color-papel-2: var(--papel-2);
+  --color-tinta: var(--tinta);
+  --color-grafito: var(--grafito);
+  --color-lapiz: var(--lapiz);
+  --color-carbon: var(--carbon);
+  --color-firma: var(--firma);
+  --color-texto-sobre-firma: var(--texto-sobre-firma);
+  --color-tachado: var(--tachado);
+  --color-agregado: var(--agregado);
+
+  /* next/font ya incluye los fallbacks de B.4 dentro de cada variable */
+  --font-serif: var(--f-serif);
+  --font-sans: var(--f-sans);
+  --font-mono: var(--f-mono);
+
+  /* Escala tipográfica — Parte A §2.2 */
+  --text-portada: clamp(2.75rem, 6vw, 5.5rem);
+  --text-seccion: clamp(1.75rem, 3vw, 2.5rem);
+  --text-cuerpo: 1.0625rem;
+  --text-meta: 0.8125rem;
+  --text-meta-min: 0.75rem;
+
+  /* Retícula — Parte A §2.3: el texto principal no pasa de 68 caracteres */
+  --container-medida: 68ch;
+}
+
+@layer base {
+  html {
+    background-color: var(--papel);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--papel);
+    color: var(--grafito);
+    font-family: var(--font-sans);
+    font-size: var(--text-cuerpo);
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: var(--tinta);
+    font-family: var(--font-serif);
+  }
+
+  /* Foco visible: 2 px en --firma con 2 px de separación (B.13) */
+  :focus-visible {
+    outline: 2px solid var(--firma);
+    outline-offset: 2px;
+  }
+
+  a {
+    color: var(--firma);
+  }
+
+  /* Duraciones de 150 a 300 ms y respeto por el movimiento reducido (A §2.4) */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

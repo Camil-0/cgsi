@@ -1,0 +1,49 @@
+{
+  "name": "cgsi",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Sitio de CG Software Integration S.A.S. — Ref. CSI-2026-WEB-001",
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@10.28.0",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "contenido": "velite build",
+    "build": "velite build && next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "velite build && tsc --noEmit",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test --project=e2e --project=e2e-movil",
+    "test:a11y": "playwright test --project=a11y",
+    "verificar": "pnpm lint && pnpm typecheck && pnpm test:unit && pnpm build"
+  },
+  "pnpm": {
+    "overrides": {
+      "sharp": "^0.35.4"
+    }
+  },
+  "dependencies": {
+    "next": "^16.3.5",
+    "next-intl": "^4.14.6",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9",
+    "eslint-config-next": "^16.3.5",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "velite": "^0.4.0",
+    "vitest": "^5.0.1"
+  }
+}
