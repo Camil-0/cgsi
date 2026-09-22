@@ -414,18 +414,41 @@
     border-bottom: 1px solid var(--carbon);
   }
 
-  /* ---------- Expedientes ---------- */
+  /* ---------- Expedientes: pestañas de carpeta ---------- */
 
-  .expediente + .expediente {
-    margin-top: 4rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--papel-2);
+  .pestanas-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    border-bottom: 1px solid var(--carbon);
   }
 
-  .expediente-titulo {
-    font-family: var(--font-serif);
-    font-size: 1.375rem;
+  .pestana {
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--lapiz);
+    background: none;
+    border: 1px solid var(--papel-2);
+    border-bottom: 0;
+    cursor: pointer;
+  }
+
+  .pestana[aria-selected='true'] {
     color: var(--tinta);
+    background-color: var(--papel-2);
+    border-color: var(--carbon);
+  }
+
+  .panel-expediente {
+    padding-top: 2rem;
+    view-transition-name: expediente;
+  }
+
+  .panel-expediente:focus-visible {
+    outline-offset: 4px;
   }
 
   .expediente-etiqueta {
@@ -442,6 +465,20 @@
     margin: 2.5rem 0 0;
   }
 
+  .figura-lienzo {
+    position: relative;
+    padding-left: 0.75rem;
+  }
+
+  .figura-trazo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    overflow: visible;
+  }
+
   .figura-estados {
     list-style: none;
     margin: 0;
@@ -454,14 +491,30 @@
     display: grid;
     grid-template-columns: 1.75rem 1fr;
     align-items: baseline;
-    border-left: 1px solid var(--carbon);
-    padding-left: 0.75rem;
   }
 
   .figura-numero {
     font-family: var(--font-mono);
     font-size: 0.75rem;
     color: var(--carbon);
+    transition: color 200ms ease;
+  }
+
+  /* El marcador recorre los estados ligado al scroll (B.6, animación 4) */
+  .figura-estado.activo .figura-numero {
+    color: var(--firma);
+  }
+
+  .figura-estado.activo .figura-nombre {
+    color: var(--tinta);
+  }
+
+  @media (min-width: 1024px) {
+    /* La figura se queda fija con `sticky`, nunca con un pin que toque el scroll */
+    .figura {
+      position: sticky;
+      top: 20vh;
+    }
   }
 
   .figura-mensaje {
@@ -507,6 +560,15 @@
     color: var(--lapiz);
   }
 
+  /* ---------- Movimiento ---------- */
+
+  /* El doble filete de la portada arranca sin trazo solo cuando va a animarse:
+     lo marca `ScriptMovimiento` antes del primer pintado (B.6, animación 1). */
+  [data-movimiento='si'] .portada [data-filete] line {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+
   /* ---------- Marcadores pendientes ---------- */
 
   .pendiente {
@@ -535,5 +597,60 @@
   .interruptor-tema[aria-pressed='true'] {
     color: var(--firma);
     border-color: var(--firma);
+  }
+}
+
+/* Transición lateral entre expedientes (B.6, animación 5).
+   Va fuera de `@layer` porque las pseudoclases de View Transitions viven en el
+   pseudo-árbol del documento, no en la cascada de componentes. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(expediente),
+  ::view-transition-new(expediente) {
+    animation-duration: 0.3s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html[data-dir='adelante']::view-transition-old(expediente) {
+    animation-name: salir-a-la-izquierda;
+  }
+
+  html[data-dir='adelante']::view-transition-new(expediente) {
+    animation-name: entrar-desde-la-derecha;
+  }
+
+  html[data-dir='atras']::view-transition-old(expediente) {
+    animation-name: salir-a-la-derecha;
+  }
+
+  html[data-dir='atras']::view-transition-new(expediente) {
+    animation-name: entrar-desde-la-izquierda;
+  }
+}
+
+@keyframes salir-a-la-izquierda {
+  to {
+    opacity: 0;
+    transform: translateX(-2rem);
+  }
+}
+
+@keyframes entrar-desde-la-derecha {
+  from {
+    opacity: 0;
+    transform: translateX(2rem);
+  }
+}
+
+@keyframes salir-a-la-derecha {
+  to {
+    opacity: 0;
+    transform: translateX(2rem);
+  }
+}
+
+@keyframes entrar-desde-la-izquierda {
+  from {
+    opacity: 0;
+    transform: translateX(-2rem);
   }
 }

@@ -207,9 +207,19 @@ Solo `NEXT_PUBLIC_*` llega al cliente. `lib/env.ts` valida con Zod y hace fallar
 
 ## 13. Rendimiento (Parte B §B.12)
 
-LCP ≤ 2,0 s en 4G · CLS ≤ 0,05 · INP ≤ 200 ms · **JS inicial ≤ 120 KB comprimido** en la
-página principal (no cuentan GSAP ni Cal.com, que van diferidos).
+LCP ≤ 2,0 s en 4G · CLS ≤ 0,05 · INP ≤ 200 ms.
 Lighthouse CI móvil: Rendimiento ≥ 90, **Accesibilidad = 100**, Buenas prácticas ≥ 95, **SEO = 100**.
+
+**JavaScript inicial.** B.12 pide ≤ 120 KB comprimidos. Ese número **no es alcanzable con el
+stack de B.1**: Next 16 con React 19 y App Router pone un piso medido de ~179 KB gzip con la
+página vacía, y no baja ni cambiando de empaquetador ni recortando objetivos de navegador
+(medido en F3; ver PROGRESS.md). Lo que rige, entonces:
+
+- **Código propio ≤ 20 KB gzip** sobre ese piso. Hoy va en ~10 KB.
+- **Lo pesado va diferido:** GSAP solo se descarga si hay movimiento; Cal.com, al acercarse a VII.
+- `tests/e2e/presupuesto.spec.ts` hace fallar el build si el JS inicial pasa de 200 KB gzip o si
+  algo diferido se cuela en el arranque.
+- Las métricas de usuario (LCP, CLS, INP, Lighthouse) son el criterio real de F6.
 
 ## 14. Accesibilidad (Parte B §B.13, WCAG 2.2 AA)
 

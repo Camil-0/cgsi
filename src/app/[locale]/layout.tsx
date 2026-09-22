@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BotonImprimir } from '@/components/documento/BotonImprimir';
+import { Movimiento } from '@/components/movimiento/Movimiento';
+import { ScriptMovimiento } from '@/components/movimiento/ScriptMovimiento';
 import { AplicarTema } from '@/components/tema/AplicarTema';
 import { InterruptorPapelPlano } from '@/components/tema/InterruptorPapelPlano';
 import { ScriptTema } from '@/components/tema/ScriptTema';
@@ -51,7 +53,9 @@ export default async function LayoutRaiz({ children, params }: Props) {
     <html lang={etiquetaIdioma[locale]} className={claseFuentes} suppressHydrationWarning>
       <body>
         <ScriptTema />
+        <ScriptMovimiento />
         <AplicarTema />
+        <Movimiento />
 
         {/* Sin JavaScript las notas quedan visibles: nunca hay contenido
             atrapado detrás de un botón que no responde. */}

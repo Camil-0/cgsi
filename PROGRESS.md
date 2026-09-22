@@ -15,7 +15,7 @@ Ningún despliegue a producción sin revisión humana explícita.
 | F0 Base | 🟢 Cerrada y revisada | 21.09.2026 |
 | F1 Sistema documento | 🟢 Cerrada | 22.09.2026 |
 | F2 Contenido | 🟢 Cerrada | 22.09.2026 |
-| F3 Movimiento | ⬜ Sin empezar | — |
+| F3 Movimiento | 🟢 Cerrada | 22.09.2026 |
 | F4 Integraciones | ⬜ Sin empezar | — |
 | F5 SEO y memorandos | ⬜ Sin empezar | — |
 | F6 Endurecimiento | ⬜ Sin empezar | — |
@@ -31,6 +31,9 @@ Decisiones que el brief no cierra y que se resolvieron con el fundador antes de 
 | 21.09.2026 | Raíz del proyecto | El proyecto Next vive en la **raíz del repo**, no en `cgsi-web/`. `docs/` y `design/` quedan como carpetas de referencia y no entran al build. El árbol de B.2 se actualizó en el brief. | Camilo |
 | 21.09.2026 | Runtime | **Node 24 LTS** en local, en CI y en producción, en lugar del Node 22 LTS de B.1. Un solo runtime en todas partes. | Camilo |
 | 21.09.2026 | Alcance de la sesión | Ejecutar F0 completa y detenerse en su criterio de salida para revisión humana. | Camilo |
+| 22.09.2026 | Fecha de vigencia de la política | **22 de septiembre de 2026.** Deja de ser provisional. La validación del abogado sigue pendiente y es lo único que queda marcado en la página. | Camilo |
+| 22.09.2026 | Nota al pie 12 | Recortar «; ver sección 9»: esa sección es del brief, no del sitio. La desviación queda declarada en `tests/unit/copy.test.ts`. | Camilo |
+| 22.09.2026 | Presupuesto de JS | Delegado en el agente: decidir en F3 con la medición en la mano. | Camilo |
 | 22.09.2026 | Revisión de F0 | Aprobada. El presupuesto de JS se decide en F3 (evaluando carga diferida). El override de `sharp` se mantiene: la prioridad es no tener vulnerabilidades. Las desviaciones técnicas quedan aprobadas mientras el resultado sea estable. | Camilo |
 
 ## Desviaciones respecto a la Parte B
@@ -59,6 +62,8 @@ Decisiones que el brief no cierra y que se resolvieron con el fundador antes de 
 | Parte A §3, pie | «Página N de VII · Rev. {versión}» dentro del pie | Lo muestra el cajetín | Es el mismo dato y el cajetín ya lo calcula en vivo. Repetirlo en el pie sería una segunda fuente que se puede desincronizar. |
 | Parte A §3, VII | «[Agenda Cal.com embebida] · [Escribir por WhatsApp]» | Hueco marcado `{PENDIENTE}` | La agenda y el botón de WhatsApp son F4. El hueco se ve, en vez de fingir una agenda que no existe. |
 | Parte A §4.8 | «un enlace al índice», sin texto | «Volver al índice» | El brief no da la etiqueta. Es funcional, no una afirmación. |
+| B.12 Presupuesto de JS | ≤ 120 KB comprimidos de JS inicial | Código propio ≤ 20 KB gzip sobre el piso del framework, con techo duro de 200 KB en pruebas | El piso de Next 16 con React 19 es de ~179 KB gzip con la página vacía. El número de B.12 no es alcanzable sin cambiar la decisión de stack de B.1. Medición completa en F3. Decisión delegada por Camilo el 22.09.2026. |
+| B.5 `DobleFilete` | Componente de cliente | Sigue siendo de servidor en F3 | GSAP lo anima desde fuera, por elemento, no por componente. Así el filete se renderiza sin JavaScript y el motor de movimiento vive en un solo módulo diferido, que es lo que pide B.6.7. |
 
 ## Dependencias fuera de B.1
 
@@ -73,7 +78,7 @@ Decisiones que el brief no cierra y que se resolvieron con el fundador antes de 
 | `{PENDIENTE: agenda de Cal.com}` | Sección VII, componente `Agenda` | El agente, en F4 | Nada. |
 | `{PENDIENTE: mensajes de WhatsApp por estado}` | Fig. 1 del expediente Essenza | Camilo | Nada en el build. La Parte A §3 pide el mensaje que recibe el cliente en cada estado, pero no los transcribe. |
 | `{PENDIENTE: testimonio del Anexo 2}` | `content/es/expedientes/essenza.mdx` | Camilo | Lanzamiento. El texto del Anexo 2 no está en el brief. |
-| `{PENDIENTE: validación legal y fecha de vigencia}` | Cabeza de `/politica-de-datos` | Camilo y abogado | **Lanzamiento.** Ver el riesgo de la fecha de vigencia, abajo. |
+| `{PENDIENTE: validación por abogado}` | Cabeza de `/politica-de-datos` | Camilo y abogado | **Lanzamiento.** La fecha de vigencia ya está fija: 22.09.2026. |
 | `{PENDIENTE: dominio}` | `NEXT_PUBLIC_SITE_URL`, canónicas, JSON-LD | Camilo | Lanzamiento (Parte A §11). Mientras tanto: `http://localhost:3000` en desarrollo y `http://127.0.0.1:3100` en CI. |
 | Correo del dominio | Pie del sitio, política de datos, JSON-LD | Camilo | Lanzamiento. Hoy se publica `cgsoftwareintegrations@gmail.com`, que es el correo que la política ya declara; hay que cambiarlo por el del dominio antes de salir (Parte A §9). |
 | `{PENDIENTE: enlace del evento Cal.com}` | `NEXT_PUBLIC_CAL_LINK` | Camilo | F4 |
@@ -90,9 +95,11 @@ Esta tabla solo lista los que dejan un marcador visible en el código o bloquean
 
 | Riesgo | Medición | Cuándo se resuelve |
 |---|---|---|
-| **Presupuesto de JS.** B.12 fija ≤ 120 KB comprimidos de JS inicial en la página principal. La base de Next 16 + React 19, con la página vacía, ya va en **178,9 KB gzip / 154,3 KB brotli** (7 scripts, 586,1 KB sin comprimir). Quitar `NextIntlClientProvider` del layout solo baja 9,9 KB: el peso es del framework, no del contenido. Con F1 cerrada va en **182,2 KB gzip / 157,1 KB brotli**: los cuatro componentes de cliente sumaron 3,3 KB. | Medido el 21 y el 22.09.2026 sobre el build de producción, sumando los `<script src>` de `/`. | **F3**, cuyo criterio de salida es el presupuesto. Camilo decidió el 22.09.2026 esperar a F3 y evaluar allí la carga diferida. Caminos a evaluar allí: dar traducciones a los componentes de cliente por props en vez de proveedor, revisar el build de Turbopack contra el de webpack, y confirmar con qué compresión se mide el umbral. Si el piso del framework no baja de 120 KB, hay que renegociar el número con el fundador, no maquillar la medición. |
+| ~~Presupuesto de JS~~ | **Resuelto en F3.** El umbral de 120 KB de B.12 no es alcanzable con el stack de B.1: el piso del framework es de ~179 KB gzip con la página vacía, y no baja ni cambiando de empaquetador ni recortando objetivos de navegador. Se redefinió lo que sí se controla y se puso una prueba que lo vigila. Ver «El presupuesto de JavaScript» en F3. | — |
+| **Bloque de polyfills de 38,7 KB gzip** que se sirve a todos los navegadores, sin `nomodule`, en Turbopack y en webpack por igual. Es el 20 % del arranque. | Medido el 22.09.2026, al desglosar los trozos del build. | **F6**, donde vive el endurecimiento de rendimiento. |
 | ~~Contraste del modo Plano~~ | **Resuelto en F1.** Ver la tabla de medición más abajo: los diez tokens pasan AA en las dos superficies. | — |
-| **Fecha de vigencia de la política.** B.8 hace fallar el build si `vigenteDesde` está vacío, y la fuente (`docs/politica-de-datos.md`) trae el marcador `{FECHA_DE_PUBLICACION}`. Para no dejar la fase bloqueada, el MDX lleva **22.09.2026 como fecha provisional** y la página muestra, arriba del todo, que está pendiente de validación legal y de su fecha definitiva. | Decidido el 22.09.2026 por el agente, con aviso visible en la página. | **Antes del lanzamiento.** Camilo y el abogado fijan la fecha real; hay que cambiarla en `content/es/legal/politica-de-datos.mdx` y quitar el aviso. El gate de F6 no debe pasar con la fecha provisional. |
+| ~~Fecha de vigencia de la política~~ | **Resuelto el 22.09.2026:** Camilo la fijó en el 22 de septiembre de 2026, que es la que ya estaba en el MDX. | — |
+| **La política no la ha revisado un abogado.** La página lo dice, arriba del todo, con un marcador visible. | — | **Antes del lanzamiento** (Parte A §11). Al aprobarse, se quita el marcador de `messages/es.json` y de la página. El gate de F6 no debe pasar con el marcador puesto. |
 | **El pie enlaza a `/memorandos`, que todavía no existe.** El enlace es copy literal de la Parte A §3 y hoy cae en el folio no encontrado. | — | **F5**, que crea la colección y la ruta. |
 
 ---
@@ -322,11 +329,105 @@ _Cerrado en F2: los títulos viven en el frontmatter y `messages/es.json` ya no 
       vigencia) están declaradas en la prueba, con su razón.
 - [x] **Sin `{PENDIENTE}` sin registrar**: los cuatro que quedan están en la tabla de arriba.
 
-### Pendiente de decisión del fundador
+### Decisiones del fundador sobre F2 (22.09.2026)
 
-1. **Fecha de vigencia de la política** (ver riesgos). Hoy va una provisional.
-2. **Nota al pie 12.** El brief dice «Anexo de seguridad del contrato tipo; ver sección 9».
-   La sección 9 es del brief, no del sitio, así que en la página esa referencia no lleva a
-   ninguna parte. Se dejó literal, porque el copy manda; decidir si se recorta.
+1. **Fecha de vigencia de la política:** 22 de septiembre de 2026. Resuelto.
+2. **Nota al pie 12:** recortada. Resuelto.
 3. **Autorización de Essenza.** El expediente lleva la referencia CSI-2026-ESSENZA-002, que es lo
    que el build exige. La firma sigue pendiente y bloquea el lanzamiento, no el build.
+
+---
+
+## F3 — Movimiento
+
+**Alcance (B.17):** GSAP con el inventario de B.6, View Transitions en las pestañas y movimiento
+reducido.
+**Criterio de salida:** sin animaciones fuera del inventario; presupuesto de JS respetado.
+
+### Bitácora
+
+- **22.09.2026** — Inventario de B.6 implementado, pestañas de expediente con transición lateral,
+  y medición completa del presupuesto de JavaScript, que Camilo delegó en el agente.
+
+### Trabajo realizado
+
+**Las seis animaciones de B.6, ni una más**
+
+| # | Elemento | Cómo quedó |
+|---|---|---|
+| 1 | Doble filete de la portada | DrawSVG 0→100 %, 0,8 s `power2.out`, primero el grueso |
+| 2 | Doble filete de cada sección | DrawSVG al entrar (`top 80%`), una vez, 0,6 s |
+| 3 | Notas al margen | `opacity` 0→1 e `y` 8→0, 0,25 s `power1.out`, en lote |
+| 4 | Fig. 1 «Recorrido de un pedido» | Ligada al scroll con `scrub`; la figura se fija con `position: sticky`, nunca con pin |
+| 5 | Cambio de expediente | View Transition lateral de 0,3 s, según la dirección |
+| 6 | Sello «Recibido» | Entra en F4, con el propio sello |
+
+**Cómo se respetan las reglas de B.6**
+- Plugins registrados una sola vez en `src/lib/gsap.ts`. Solo ScrollTrigger y DrawSVG.
+- Todo dentro de `useGSAP` y de `gsap.matchMedia()`. Los objetivos son elementos, nunca cadenas
+  de selector: este módulo es el motor de todo el documento, no de un subárbol.
+- Solo se animan `transform`, `opacity` y el trazo SVG.
+- `ScrollTrigger.refresh()` después de `document.fonts.ready`.
+- **GSAP no entra en el JavaScript inicial:** `Movimiento` es una puerta de unas pocas líneas que
+  carga el módulo en diferido, y solo si no hay `prefers-reduced-motion: reduce`. Con movimiento
+  reducido no se descarga nada: no hay nada que animar.
+
+**Sin parpadeo en el filete de la portada.** Está sobre el pliegue, así que si GSAP llegara tarde
+se vería dibujado, luego borrado y luego redibujado. `ScriptMovimiento` marca `<html>` antes del
+primer pintado y el CSS lo deja sin trazo, con una red de seguridad de 3 s por si el módulo no
+carga. Es el mismo patrón del tema.
+
+**Pestañas de expediente.** Patrón ARIA completo: flechas con vuelta, Inicio y Fin, foco móvil y
+una sola parada de tabulador. La transición usa View Transitions; donde no hay soporte, o con
+movimiento reducido, el cambio es instantáneo. Un espejo en `ref` del índice activo evita que dos
+teclas seguidas se pisen mientras la transición está en curso: esa carrera salió en las pruebas.
+
+### El presupuesto de JavaScript
+
+Camilo delegó la decisión el 22.09.2026. Esto es lo que se midió, sobre el build de producción:
+
+| Escenario | JS inicial |
+|---|---|
+| F0, página vacía | 178,9 KB gzip · 154,3 KB brotli |
+| F3, documento completo | **188,7 KB gzip · 163,2 KB brotli** |
+| Lo mismo, con webpack en vez de Turbopack | 185,9 KB gzip |
+| Lo mismo, con `browserslist` moderno | 188,7 KB gzip (sin cambio) |
+| GSAP, que se descarga aparte y solo si hay movimiento | 45,5 KB gzip |
+
+**Lectura:** de los 188,7 KB, unos **179 son el piso de Next 16 con React 19 y App Router** —
+react-dom (69,9), el runtime de RSC y acciones de servidor (43,0) y un bloque de polyfills que
+ambos empaquetadores incluyen sin `nomodule` (38,7). **Todo el código del sitio —F1, F2 y F3—
+suma unos 10 KB.** El umbral de 120 KB de B.12 no es alcanzable sin cambiar la decisión de stack
+de B.1, que es una decisión cerrada.
+
+**Decisión:** no se persigue el número absoluto ni se maquilla la medición. En su lugar:
+
+1. **Código propio ≤ 20 KB gzip** sobre el piso del framework. Es lo que sí se controla.
+2. **Lo pesado sigue diferido:** GSAP solo si hay movimiento; Cal.com, al acercarse a VII (F4).
+3. `tests/e2e/presupuesto.spec.ts` **hace fallar el pipeline** si el JS inicial pasa de 200 KB
+   gzip o si algo diferido se cuela en el arranque. El presupuesto deja de ser una aspiración.
+4. Las métricas de usuario de B.12 (LCP ≤ 2,0 s, CLS ≤ 0,05, INP ≤ 200 ms) y los umbrales de
+   Lighthouse siguen intactos y son el criterio real de F6.
+
+**Pista para F6:** el bloque de polyfills de 38,7 KB gzip se sirve a todos los navegadores, sin
+`nomodule`, en Turbopack y en webpack por igual. Son 20 % del arranque. Merece una revisión
+enfocada cuando se endurezca el rendimiento.
+
+### Pruebas
+
+| Suite | Resultado |
+|---|---|
+| `pnpm lint` · `pnpm typecheck` | Limpios |
+| `pnpm test:unit` | **62 en verde** |
+| `pnpm test:e2e` (1440 px y 390 px) | **84 en verde** |
+| `pnpm test:a11y` | **7 en verde** |
+
+Las pruebas nuevas cubren: patrón ARIA de las pestañas, operación solo con teclado con vuelta al
+principio, que con movimiento reducido **no se descargue GSAP**, que los filetes se vean completos
+sin movimiento, que la figura marque estados al avanzar el scroll, y el presupuesto de arriba.
+
+### Verificación del criterio de salida
+
+- [x] **Sin animaciones fuera del inventario:** las seis de B.6, cada una con su variante de
+      movimiento reducido. Nada de pin, nada de smooth scroll, nada de texto partido.
+- [x] **Presupuesto respetado**, con la definición corregida y una prueba que lo vigila.

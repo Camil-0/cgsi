@@ -53,10 +53,14 @@ test.describe('secciones', () => {
   test('IV muestra los dos expedientes, y el confidencial va sin cliente', async ({ page }) => {
     await page.goto('/');
 
-    const expedientes = page.locator('#expedientes .expediente');
-    await expect(expedientes).toHaveCount(2);
-    await expect(expedientes.first()).toContainText('Essenza');
-    await expect(expedientes.nth(1)).toContainText('Confidencial');
+    const pestanas = page.locator('#expedientes [role="tab"]');
+    await expect(pestanas).toHaveCount(2);
+    await expect(pestanas.first()).toHaveText('Expediente 01 — Essenza');
+    await expect(pestanas.nth(1)).toHaveText('Expediente 02 — Salud ocupacional');
+
+    await expect(page.locator('#panel-essenza')).toBeVisible();
+    await expect(page.locator('#panel-salud-ocupacional')).toBeHidden();
+    await expect(page.locator('#panel-salud-ocupacional')).toContainText('Confidencial');
   });
 
   test('IV incluye la figura del recorrido con sus cinco estados', async ({ page }) => {

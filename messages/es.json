@@ -29,7 +29,8 @@
     }
   },
   "expedientes": {
-    "encabezado": "Expediente {numero} — {titulo}"
+    "encabezado": "Expediente {numero} — {titulo}",
+    "lista": "Expedientes"
   },
   "legal": {
     "vigencia": "Versión {version} · Vigente desde {fecha}"
@@ -44,6 +45,6 @@
   "base": {
     "pendienteAgenda": "'{'PENDIENTE: agenda de Cal.com — se integra en F4'}'",
     "pendienteMensajes": "'{'PENDIENTE: mensajes de WhatsApp por estado — Parte A §3, IV'}'",
-    "pendientePolitica": "'{'PENDIENTE: validación legal y fecha de vigencia definitiva — Parte A §11'}'"
+    "pendientePolitica": "'{'PENDIENTE: validación por abogado — Parte A §11'}'"
   }
 }

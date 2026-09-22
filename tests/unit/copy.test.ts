@@ -81,7 +81,10 @@ function leerFuente(ruta: string): string {
  */
 const brief = leerFuente('docs/brief.md')
   .replace('{correo del dominio}', 'cgsoftwareintegrations@gmail.com')
-  .replace(' · Página N de VII · Rev. {versión}', '');
+  .replace(' · Página N de VII · Rev. {versión}', '')
+  // La nota 12 remite a la sección 9 del brief, que no existe en el sitio.
+  // Camilo pidió recortarla el 22.09.2026.
+  .replace('Anexo de seguridad del contrato tipo; ver sección 9.', 'Anexo de seguridad del contrato tipo.');
 
 // `normalizar` ya quitó los guiones bajos del marcador de fecha.
 const politica = leerFuente('docs/politica-de-datos.md').replace(/\{FECHA_?DE_?PUBLICACION\}/g, '');
