@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
+import { expect, test, testSinConsentimiento } from '../utiles/playwright';
 
 /** Accesibilidad (B.13): cero violaciones de axe en todas las rutas, en Papel y en Plano. */
 
@@ -27,6 +27,27 @@ for (const { nombre, ruta } of rutas) {
       expect(resultado.violations).toEqual([]);
     });
   }
+}
+
+for (const tema of temas) {
+  testSinConsentimiento(
+    `el aviso de cookies no tiene violaciones de axe (${tema.nombre})`,
+    async ({ page }) => {
+      await page.emulateMedia({ colorScheme: tema.esquema });
+      await page.goto('/');
+
+      await expect(page.locator('.aviso-cookies')).toBeVisible();
+
+      const conAviso = await new AxeBuilder({ page }).withTags(etiquetas).analyze();
+      expect(conAviso.violations).toEqual([]);
+
+      await page.locator('.aviso-cookies').getByRole('button', { name: 'Configuración' }).click();
+      await expect(page.locator('dialog.dialogo-cookies')).toBeVisible();
+
+      const conDialogo = await new AxeBuilder({ page }).withTags(etiquetas).analyze();
+      expect(conDialogo.violations).toEqual([]);
+    },
+  );
 }
 
 test('el documento se recorre completo con el teclado', async ({ page }) => {

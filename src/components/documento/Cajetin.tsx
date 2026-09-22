@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 type Props = {
@@ -21,6 +21,7 @@ type Props = {
  */
 export function Cajetin({ revision, fecha, numeralInicial }: Props) {
   const [numeral, setNumeral] = useState<string>(numeralInicial);
+  const caja = useRef<HTMLElement>(null);
   const t = useTranslations('documento.cajetin');
 
   useEffect(() => {
@@ -61,8 +62,29 @@ export function Cajetin({ revision, fecha, numeralInicial }: Props) {
     }
   }, [numeral]);
 
+  // El aviso de cookies se apoya sobre el cajetín, que en móvil es una barra
+  // fija abajo. Su alto depende de cómo envuelva el texto, así que se mide en
+  // vez de adivinarse.
+  useEffect(() => {
+    const nodo = caja.current;
+    if (!nodo) return;
+
+    const medir = () => {
+      const alto = nodo.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--alto-cajetin', `${Math.ceil(alto)}px`);
+    };
+
+    const observador = new ResizeObserver(medir);
+    observador.observe(nodo);
+
+    return () => {
+      observador.disconnect();
+      document.documentElement.style.removeProperty('--alto-cajetin');
+    };
+  }, []);
+
   return (
-    <aside aria-label={t('etiqueta')} className="cajetin">
+    <aside ref={caja} aria-label={t('etiqueta')} className="cajetin">
       {t('texto', { revision, fecha, pagina: numeral })}
     </aside>
   );

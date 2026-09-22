@@ -519,6 +519,49 @@ enlace de WhatsApp tiene el formato correcto y **la página no descarga nada de 
 192,1 KB gzip / 166,3 KB brotli de JavaScript inicial: **+3,4 KB** sobre F3, que es todo el
 código de cliente de F4 más la analítica de Vercel. PostHog y Cal.com **no** están en el arranque.
 
+### Consentimiento de cookies (22.09.2026, pedido por Camilo)
+
+Camilo pidió PostHog con toda su funcionalidad y un aviso de cookies: sencillo para aceptar, y
+con la configuración por categorías para no aceptar. Eso cambió tres cosas.
+
+**La política.** Se reescribió la sección 12 completa, en los dos archivos —la fuente
+`docs/politica-de-datos.md` y el MDX publicado—: qué categorías hay, qué guarda cada cookie y
+cuánto dura, qué hace la analítica y qué hace la grabación de sesión, qué **no** hacemos, y cómo
+retirar el permiso. También cambió la fila de «Visitantes del sitio web» de la sección 4, que ya
+no puede decir «anónimos y agregados», y la de PostHog en la tabla de encargados.
+**Esto queda para el abogado**, que ya tiene pendiente revisar la política.
+
+**El consentimiento.** Cuatro categorías independientes: necesarias (no se apagan), preferencias,
+analítica y grabación de sesión. La decisión se guarda con la fecha y **la versión de la
+política**, que se lee del propio MDX: si la política sube de versión, la decisión anterior deja
+de valer y se vuelve a preguntar. Lo mismo a los doce meses. Una decisión ilegible, vencida o de
+otra versión **nunca se interpreta como permiso**: hay pruebas que lo verifican, y se comprobó
+que fallan si alguien invierte esa lógica.
+
+**Las categorías hacen lo que dicen.** No son decorativas:
+- Sin «analítica», el código de PostHog no se descarga y Vercel Analytics no se monta.
+- Sin «grabación», PostHog arranca con la grabación apagada.
+- Sin «preferencias», el tema Papel/Plano **no se guarda**: vale para la pestaña y nada más.
+- Al retirar el permiso, se le pide a PostHog que deje de capturar y borre lo que guardó.
+
+**Sobre el patrón de «rechazar dentro de configuración».** Camilo lo pidió así y así quedó. Vale
+la pena dejarlo dicho: aceptar es un clic y rechazar son dos. En la Unión Europea eso se considera
+un patrón oscuro; la Ley 1581 no lo prohíbe expresamente. Para que el «no» siga siendo real, la
+configuración tiene «Rechazar todo» como primer botón, cada categoría se apaga por separado, y
+cerrar con Escape **no** decide nada. Queda anotado para la revisión del abogado.
+
+**Dos cosas que encontraron las pruebas y el review de interfaz**
+1. Una violación seria de axe que yo mismo introduje: los enlaces dentro de un párrafo en
+   `--lapiz` se distinguían **solo por color** (1,38:1 contra el texto vecino, WCAG 1.4.1).
+   Ahora todos los enlaces van subrayados por defecto, y los que son botones se lo quitan.
+2. El aviso tapaba el cajetín en móvil. El alto de esa barra depende de cómo envuelva su texto,
+   así que el `Cajetin` ahora lo mide con `ResizeObserver` y publica `--alto-cajetin`, que usan
+   tanto el aviso como el `scroll-padding-bottom` del documento.
+
+Del review de interfaz salieron además: `overscroll-behavior: contain` en el diálogo,
+`touch-action: manipulation` en los botones, `text-wrap: balance` en los titulares y
+`overflow-wrap` para correos y URLs largas.
+
 ### Lo que falta para cerrar F4
 
 1. Cal.com configurado (`TODO.md`, punto 3) → reserva de prueba de principio a fin.

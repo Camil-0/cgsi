@@ -3,6 +3,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BotonImprimir } from '@/components/documento/BotonImprimir';
 import { Analitica } from '@/components/analitica/Analitica';
+import { AvisoCookies } from '@/components/consentimiento/AvisoCookies';
 import { Movimiento } from '@/components/movimiento/Movimiento';
 import { ScriptMovimiento } from '@/components/movimiento/ScriptMovimiento';
 import { AplicarTema } from '@/components/tema/AplicarTema';
@@ -10,6 +11,7 @@ import { InterruptorPapelPlano } from '@/components/tema/InterruptorPapelPlano';
 import { ScriptTema } from '@/components/tema/ScriptTema';
 import { etiquetaIdioma, routing } from '@/i18n/routing';
 import { entornoPublico } from '@/lib/env';
+import { versionPolitica } from '@/lib/politica';
 import { claseFuentes } from '@/lib/fuentes';
 import '@/styles/globals.css';
 
@@ -47,6 +49,7 @@ export default async function LayoutRaiz({ children, params }: Props) {
   setRequestLocale(locale);
 
   const t = await getTranslations();
+  const version = versionPolitica();
 
   // `suppressHydrationWarning` en el `<html>`: `ScriptTema` escribe `data-tema`
   // antes de que React hidrate, y sin esto React lo borraría al reconciliar.
@@ -74,17 +77,20 @@ export default async function LayoutRaiz({ children, params }: Props) {
 
         <NextIntlClientProvider>
           <div className="barra" data-sin-imprimir>
-            <InterruptorPapelPlano />
+            <InterruptorPapelPlano version={version} />
             <BotonImprimir />
           </div>
 
           {children}
-        </NextIntlClientProvider>
 
-        <Analitica
-          clave={entornoPublico().NEXT_PUBLIC_POSTHOG_KEY}
-          host={entornoPublico().NEXT_PUBLIC_POSTHOG_HOST}
-        />
+          <AvisoCookies version={version} />
+
+          <Analitica
+            clave={entornoPublico().NEXT_PUBLIC_POSTHOG_KEY}
+            host={entornoPublico().NEXT_PUBLIC_POSTHOG_HOST}
+            version={version}
+          />
+        </NextIntlClientProvider>
 
         <p className="hoja-pie">
           {t('sitio.razonSocial')} · {t('sitio.nit')} · {t('sitio.correo')}

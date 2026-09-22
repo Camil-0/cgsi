@@ -35,6 +35,36 @@
     "tituloAgenda": "Agenda de diagnóstico",
     "sello": "Recibido · {cuando} COT · Te escribimos en menos de una hora hábil"
   },
+  "cookies": {
+    "titulo": "Cookies de este sitio",
+    "resumen": "Usamos cookies para recordar tus preferencias y para entender cómo se usa el sitio. Tú decides cuáles.",
+    "intro": "Cada categoría se enciende y se apaga por separado. Puedes cambiar esto cuando quieras desde el pie del sitio.",
+    "verPolitica": "Leer la política de datos",
+    "aceptarTodo": "Aceptar todo",
+    "configurar": "Configuración",
+    "configurarPie": "Configurar cookies",
+    "rechazarTodo": "Rechazar todo",
+    "guardarSeleccion": "Guardar mi selección",
+    "siempreActiva": "Siempre activa.",
+    "categorias": {
+      "necesarias": {
+        "nombre": "Necesarias",
+        "detalle": "Recordar tu propia decisión sobre cookies. Sin ellas no podríamos recordar que dijiste que no."
+      },
+      "preferencias": {
+        "nombre": "Preferencias",
+        "detalle": "Recordar si prefieres la vista Papel o la vista Plano. Si la apagas, el tema dura lo que dure la pestaña."
+      },
+      "analitica": {
+        "nombre": "Analítica",
+        "detalle": "Entender qué páginas se leen, de dónde llegas y en qué dispositivo. La hacen PostHog y Vercel. Mientras no la autorices, no se descarga su código."
+      },
+      "grabacion": {
+        "nombre": "Grabación de sesión",
+        "detalle": "Reproducir la navegación para ver dónde se traba el sitio. Lo que escribes en los formularios va enmascarado y no se graba."
+      }
+    }
+  },
   "pie": {
     "medida": "Esta página pesó {kb} KB y cargó en {segundos} s en tu conexión.",
     "desdeCache": "Esta página se sirvió desde caché."

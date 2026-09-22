@@ -195,11 +195,14 @@ no tiene `vigenteDesde`.
 - **Mensajería:** interfaz `Mensajeria` con proveedores `evolution | cloud | ninguno`.
   Evolution **solo** para avisos internos al fundador desde un número secundario.
   Nunca se envían mensajes automáticos por WhatsApp a prospectos.
-- **Analítica sin cookies:** PostHog va con `persistence: 'memory'`, sin grabación de sesión y sin
-  autocaptura, y se carga en diferido. Por eso el sitio no lleva banner de consentimiento y la
-  política puede decir que la analítica no usa cookies. **Si algún día se identifica a un
-  visitante entre sesiones, hay que agregar aviso y consentimiento** (Parte A §7.5) y publicar una
-  versión nueva de la política.
+- **Analítica con consentimiento previo:** PostHog corre con toda su funcionalidad (cookie de
+  identificación, autocaptura y, aparte, grabación de sesión), **pero nada se carga hasta que la
+  persona lo autoriza**. El aviso de cookies tiene cuatro categorías independientes —necesarias,
+  preferencias, analítica y grabación— y la decisión se guarda con la fecha y la **versión de la
+  política**: si la política sube de versión, o pasan 12 meses, se vuelve a preguntar.
+  Al retirar el permiso se le pide a PostHog que deje de capturar y borre lo guardado.
+- **Las categorías mandan de verdad:** sin «preferencias», el tema no se persiste; sin
+  «analítica», ni PostHog ni Vercel Analytics se montan. Hay pruebas que lo verifican.
 - **No se integran en la v1:** CRM, chat en vivo, píxeles publicitarios, newsletter.
 
 > Lo que está bloqueado por credenciales o por terceros vive en `TODO.md`, con los pasos concretos.

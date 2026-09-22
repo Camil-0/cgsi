@@ -2,6 +2,7 @@ import * as runtime from 'react/jsx-runtime';
 import { Agenda } from '@/components/contacto/Agenda';
 import { AvisoPrivacidad } from '@/components/contacto/AvisoPrivacidad';
 import { BotonWhatsApp } from '@/components/contacto/BotonWhatsApp';
+import { BotonConfigurarCookies } from '@/components/consentimiento/BotonConfigurarCookies';
 import { MedidorCarga } from '@/components/pie/MedidorCarga';
 import { Expedientes } from '@/components/expedientes/Expedientes';
 import { Link } from '@/i18n/navigation';
@@ -35,6 +36,7 @@ const componentes = {
   Acciones,
   Agenda,
   AvisoPrivacidad,
+  BotonConfigurarCookies,
   BotonWhatsApp,
   Cta,
   MedidorCarga,

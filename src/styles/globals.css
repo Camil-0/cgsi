@@ -37,6 +37,9 @@
   html {
     background-color: var(--papel);
     -webkit-text-size-adjust: 100%;
+    /* El cajetín y el aviso de cookies son barras fijas abajo: al llevar el foco
+       o un ancla a la vista, hay que dejarles su espacio o taparían el destino. */
+    scroll-padding-bottom: calc(var(--alto-cajetin, 2.5rem) + 2rem);
   }
 
   body {
@@ -45,6 +48,8 @@
     font-family: var(--font-sans);
     font-size: var(--text-cuerpo);
     line-height: 1.6;
+    /* Un correo largo o una URL no deben romper la retícula. */
+    overflow-wrap: break-word;
   }
 
   h1,
@@ -52,6 +57,13 @@
   h3 {
     color: var(--tinta);
     font-family: var(--font-serif);
+    /* Sin líneas huérfanas de una palabra en los titulares. */
+    text-wrap: balance;
+  }
+
+  button {
+    /* Quita el retardo de 300 ms del doble toque en móvil. */
+    touch-action: manipulation;
   }
 
   /* Foco visible: 2 px en --firma con 2 px de separación (B.13) */
@@ -60,8 +72,13 @@
     outline-offset: 2px;
   }
 
+  /* Los enlaces van subrayados: el color no puede ser lo único que los distinga
+     del texto que los rodea (WCAG 1.4.1). Los que son botones —CTA, índice,
+     pestañas— se quitan el subrayado en su propia regla. */
   a {
     color: var(--firma);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
   }
 
   /* Duraciones de 150 a 300 ms y respeto por el movimiento reducido (A §2.4) */

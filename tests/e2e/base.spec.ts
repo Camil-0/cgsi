@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../utiles/playwright';
 
 /**
  * Criterio de salida de F0 (B.17): página con los tokens aplicados.

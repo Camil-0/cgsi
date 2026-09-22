@@ -1,6 +1,14 @@
 /* Sistema documento (F1): retícula de la Parte A §2.3 y componentes de B.5.
    Ningún color escrito a mano: todo sale de los tokens. */
 
+:root {
+  /* En móvil el cajetín es una barra fija abajo y el aviso de cookies se apoya
+     sobre ella en vez de taparla. El `Cajetin` mide su alto real y actualiza
+     esta variable: el texto envuelve distinto según el ancho, así que un número
+     fijo se quedaría corto. Este valor es solo el punto de partida. */
+  --alto-cajetin: 2.5rem;
+}
+
 @layer components {
   /* ---------- Retícula ---------- */
 
@@ -314,6 +322,7 @@
     align-items: center;
     justify-content: center;
     min-height: 44px;
+    touch-action: manipulation;
     padding-inline: 1.25rem;
     font-family: var(--font-sans);
     font-size: 1rem;
@@ -586,6 +595,186 @@
     font-size: 0.6875rem;
     letter-spacing: 0.02em;
     color: var(--lapiz);
+  }
+
+  /* ---------- Aviso de cookies ---------- */
+
+  .aviso-cookies {
+    position: fixed;
+    inset-inline: 0;
+    /* Justo encima del cajetín, que también vive abajo en móvil. */
+    bottom: calc(var(--alto-cajetin) + env(safe-area-inset-bottom));
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem max(1.5rem, env(safe-area-inset-right)) 1.25rem
+      max(1.5rem, env(safe-area-inset-left));
+    background-color: var(--papel-2);
+    border-top: 3px solid var(--tinta);
+    box-shadow: 0 -8px 24px -18px var(--tinta);
+  }
+
+  .aviso-cookies-texto {
+    max-width: var(--container-medida);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .aviso-cookies-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 1024px) {
+    .aviso-cookies {
+      bottom: 0;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      padding-inline: 3rem;
+    }
+
+    .aviso-cookies-acciones {
+      flex: none;
+    }
+  }
+
+  /* ---------- Configuración de cookies ---------- */
+
+  .dialogo-cookies {
+    /* `margin: auto` lo centra: el preflight de Tailwind quita el que trae
+       `<dialog>` de fábrica. */
+    margin: auto;
+    width: min(38rem, calc(100vw - 2rem));
+    max-height: min(48rem, calc(100dvh - 2rem));
+    padding: 1.75rem;
+    border: 1px solid var(--carbon);
+    background-color: var(--papel);
+    color: var(--grafito);
+  }
+
+  /* Solo cuando está abierto: `dialog` cerrado sigue con `display: none`.
+     La lista de categorías es lo único que se desplaza; el título y los botones
+     se quedan siempre a la vista, que es donde se decide. */
+  .dialogo-cookies[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dialogo-cookies > form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .dialogo-cookies::backdrop {
+    /* Del token, no de un negro suelto: el velo también cambia con el tema. */
+    background-color: color-mix(in srgb, var(--tinta) 55%, transparent);
+  }
+
+  .dialogo-cookies-titulo {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--tinta);
+  }
+
+  .dialogo-cookies-intro {
+    margin-top: 0.75rem;
+    font-size: 0.9375rem;
+    color: var(--lapiz);
+  }
+
+  .categorias {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    /* El desplazamiento dentro del diálogo no arrastra la página de atrás. */
+    overscroll-behavior: contain;
+
+    /* Sombra de desplazamiento: solo aparece cuando queda contenido fuera de
+       vista, para que nadie se pierda una categoría por no ver que hay más. */
+    background:
+      linear-gradient(var(--papel) 30%, transparent) top / 100% 1.5rem no-repeat local,
+      linear-gradient(transparent, var(--papel) 70%) bottom / 100% 1.5rem no-repeat local,
+      radial-gradient(
+          farthest-side at 50% 0,
+          color-mix(in srgb, var(--tinta) 16%, transparent),
+          transparent
+        )
+        top / 100% 0.5rem no-repeat scroll,
+      radial-gradient(
+          farthest-side at 50% 100%,
+          color-mix(in srgb, var(--tinta) 16%, transparent),
+          transparent
+        )
+        bottom / 100% 0.5rem no-repeat scroll;
+  }
+
+  .categoria {
+    padding-block: 1rem;
+    border-top: 1px solid var(--papel-2);
+  }
+
+  .categoria-control {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    /* Objetivo táctil de 44 px (B.13) */
+    min-height: 44px;
+  }
+
+  .categoria-control input {
+    width: 1.125rem;
+    height: 1.125rem;
+    accent-color: var(--firma);
+  }
+
+  .categoria-nombre {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--tinta);
+    cursor: pointer;
+  }
+
+  .categoria-control input:disabled + .categoria-nombre {
+    color: var(--lapiz);
+    cursor: default;
+  }
+
+  .categoria-detalle {
+    margin-top: 0.25rem;
+    padding-left: 1.75rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--lapiz);
+  }
+
+  .dialogo-cookies-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--papel-2);
+  }
+
+  .enlace-pie {
+    padding: 0;
+    font: inherit;
+    color: var(--firma);
+    background: none;
+    border: 0;
+    text-decoration: underline;
+    cursor: pointer;
   }
 
   /* ---------- Movimiento ---------- */

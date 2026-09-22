@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../utiles/playwright';
 
 /** Tema Papel/Plano (B.3 y B.5). */
 

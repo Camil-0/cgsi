@@ -100,10 +100,10 @@ declara. La Parte A §9 dice que el sitio no sale con `@gmail`.
 
 **Sale de aquí:** `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST`
 
-> El sitio configura PostHog **sin cookies y sin almacenamiento persistente**
-> (`persistence: 'memory'`), sin grabación de sesión y sin autocaptura. Así la política puede
-> seguir diciendo que la analítica no usa cookies. Si algún día se quiere identificar visitantes
-> entre sesiones, hay que **agregar aviso y consentimiento** (Parte A §7.5) y cambiar la política.
+> PostHog corre con toda su funcionalidad, **pero solo después de que la persona la autorice** en
+> el aviso de cookies. La grabación de sesión es una categoría aparte, apagada salvo que la
+> enciendan. La política ya describe las cuatro categorías, qué guarda cada cookie y cuánto dura.
+> **Tu abogado debe revisar la sección 12 de la política**, que se reescribió completa para esto.
 
 ---
 

@@ -1,5 +1,5 @@
 import { gzipSync } from 'node:zlib';
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../utiles/playwright';
 
 /**
  * Presupuesto de JavaScript (B.12, con la corrección registrada en PROGRESS.md).

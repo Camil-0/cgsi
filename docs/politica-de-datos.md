@@ -58,7 +58,7 @@ Tratamos los datos conforme a los principios de legalidad, finalidad, libertad, 
 | Personas que dan un testimonio o aparecen en un caso de estudio | Nombre, cargo, testimonio y, si lo autorizan, fotografía | Presentar el caso como referencia comercial, solo con autorización específica y escrita |
 | Candidatos y contratistas | Hoja de vida, datos de contacto y datos del proceso de selección o contratación | Evaluar perfiles; contratar; gestionar la relación |
 | Proveedores | Datos de contacto de sus representantes | Gestionar la relación comercial y los pagos |
-| Visitantes del sitio web | Datos técnicos de navegación, anónimos y agregados | Operar, proteger y medir el sitio |
+| Visitantes del sitio web | Páginas vistas, origen de la visita, tipo de dispositivo y navegador, y un identificador aleatorio que se guarda en tu navegador cuando autorizas la analítica | Operar, proteger y medir el sitio; entender qué contenido sirve y dónde se traba |
 
 No usamos tus datos para fines distintos de los informados sin pedirte una nueva autorización. No vendemos datos personales.
 
@@ -130,7 +130,7 @@ Para operar usamos proveedores que actúan como encargados y pueden tratar datos
 |---|---|
 | Cal.com | Agenda de diagnósticos |
 | Vercel | Alojamiento del sitio y analítica anónima |
-| PostHog | Analítica del sitio, sin cookies y sin identificadores persistentes |
+| PostHog | Analítica del sitio y grabación de sesión, cuando las autorizas |
 | Google (Firebase y Workspace) | Registro de solicitudes y correo |
 | Meta (WhatsApp) | Conversaciones por WhatsApp |
 | Proveedor de servidor para mensajería interna | Avisos internos de nuevas citas al equipo de CGSI |
@@ -151,11 +151,37 @@ Solo accede a tus datos quien lo necesita para las finalidades de esta política
 
 ---
 
-## 12. Cookies y analítica
+## 12. Cookies y almacenamiento del navegador
 
-- **Analítica:** nuestro sitio usa analítica anónima que no emplea cookies.
-- **Preferencia de tema:** guardamos en tu navegador la preferencia de vista Papel o Plano, que no contiene datos personales.
-- **Agenda:** la agenda embebida es un servicio de Cal.com y puede usar sus propias cookies técnicas dentro de su ventana.
+Usamos cookies y almacenamiento del navegador. La primera vez que entras te preguntamos qué autorizas, con un aviso que puedes configurar por categorías. **Mientras no decidas, solo funcionan las cookies necesarias.**
+
+Tu decisión se guarda con la fecha y la versión de esta política, y la puedes cambiar cuando quieras desde «Configurar cookies», en el pie del sitio. Si publicamos una versión nueva de esta política, o si pasan doce meses, te volvemos a preguntar.
+
+**Las categorías**
+
+| Categoría | Para qué sirve | ¿Se puede apagar? |
+|---|---|---|
+| Necesarias | Recordar tu propia decisión sobre cookies. | No. Sin ellas no podríamos recordar que dijiste que no. |
+| Preferencias | Recordar si prefieres la vista Papel o la vista Plano. | Sí. Si la apagas, el tema dura lo que dure la pestaña. |
+| Analítica | Entender qué páginas se leen, de dónde llegan las visitas y en qué dispositivo. | Sí. Mientras no la autorices, el código de analítica ni siquiera se descarga. |
+| Grabación de sesión | Reproducir la navegación para ver dónde se traba el sitio. | Sí. Está apagada salvo que la enciendas tú. |
+
+**Qué se guarda en tu navegador**
+
+| Nombre | Categoría | Qué guarda | Cuánto dura |
+|---|---|---|---|
+| `cgsi-consentimiento` | Necesarias | Tu decisión por categoría, la fecha y la versión de esta política. | 12 meses |
+| `cgsi-tema` | Preferencias | `papel` o `plano`. | Hasta que borres los datos del navegador |
+| Cookies de PostHog (`ph_*`) | Analítica | Un identificador aleatorio del navegador, para no contar dos veces a la misma persona, y la sesión en curso. | 12 meses |
+| Cookies de Cal.com | — | Las que ponga Cal.com dentro de su ventana de agenda, que solo se carga cuando la pides. | Según Cal.com |
+
+**Qué hace la analítica cuando la autorizas.** La hacen PostHog y Vercel. Registramos páginas vistas, de dónde llegaste, el tipo de dispositivo y navegador, y los clics en botones y enlaces. Con eso sabemos qué contenido sirve y qué está roto. No cruzamos esos datos con tu nombre ni con tu correo.
+
+**Qué hace la grabación de sesión cuando la autorizas.** PostHog reproduce tu navegación como una película: movimientos, clics y desplazamiento. **Lo que escribes en los formularios va enmascarado y no se graba.** Sirve para encontrar dónde se traba el sitio, no para mirar a nadie en particular.
+
+**Qué no hacemos.** No usamos cookies de publicidad. No vendemos datos. No compartimos tu navegación con redes sociales. No te perfilamos para venderte nada.
+
+**Cómo retirar el permiso.** Desde «Configurar cookies», en el pie. Al apagar la analítica, le pedimos a PostHog que deje de capturar y que borre lo que había guardado en tu navegador. También puedes borrar las cookies desde tu navegador, o activar «No rastrear» (Do Not Track): si lo tienes activo, lo respetamos.
 
 ---
 

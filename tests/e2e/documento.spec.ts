@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../utiles/playwright';
 
 /** Sistema documento (F1): retícula, secciones, índice y cajetín. */
 
@@ -112,7 +112,12 @@ test.describe('teclado', () => {
   test('el índice se recorre con el tabulador', async ({ page }) => {
     await page.goto('/');
 
-    await page.locator('.indice-enlace[data-numeral="I"]').focus();
+    const primero = page.locator('.indice-enlace[data-numeral="I"]');
+    await primero.focus();
+    // El índice es deslizable en móvil: hay que esperar a que el foco aterrice
+    // antes de tabular, o se mide un estado intermedio.
+    await expect(primero).toBeFocused();
+
     await page.keyboard.press('Tab');
 
     await expect(page.locator('.indice-enlace[data-numeral="II"]')).toBeFocused();

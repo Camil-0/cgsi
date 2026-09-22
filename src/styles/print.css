@@ -45,6 +45,9 @@
   .barra,
   .boton-barra,
   .saltar,
+  .aviso-cookies,
+  .dialogo-cookies,
+  .enlace-pie,
   [data-sin-imprimir] {
     display: none !important;
   }

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../utiles/playwright';
 
 /** Contenido (F2): el documento, los expedientes, la política y el folio no encontrado. */
 

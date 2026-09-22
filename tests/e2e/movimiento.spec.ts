@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../utiles/playwright';
 
 /** Movimiento (F3): inventario de B.6, movimiento reducido y presupuesto de JS. */
 

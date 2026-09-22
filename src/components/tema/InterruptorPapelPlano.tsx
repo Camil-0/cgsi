@@ -2,6 +2,8 @@
 
 import { useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
+import { useConsentimiento } from '@/components/consentimiento/useConsentimiento';
+import { permite } from '@/lib/consentimiento';
 import { CLAVE_TEMA } from './ScriptTema';
 
 type Tema = 'papel' | 'plano';
@@ -35,17 +37,29 @@ function suscribir(alCambiar: () => void): () => void {
 }
 
 /**
- * Interruptor Papel/Plano (B.5 y Parte A §4.5): alterna `data-tema` y lo persiste
- * en `localStorage`, dentro de try/catch. `aria-pressed` dice si la vista Plano
- * está activa.
+ * Interruptor Papel/Plano (B.5 y Parte A §4.5): alterna `data-tema`.
+ *
+ * **Solo lo persiste si se autorizó la categoría «preferencias»** del aviso de
+ * cookies. Sin esa autorización el tema vale para la pestaña actual y no queda
+ * nada guardado, que es exactamente lo que dice la política.
  */
-export function InterruptorPapelPlano() {
+export function InterruptorPapelPlano({ version }: { version: string }) {
   const tema = useSyncExternalStore<Tema>(suscribir, leerTema, () => 'papel');
+  const consentimiento = useConsentimiento(version);
   const t = useTranslations('tema');
 
   function alternar() {
     const siguiente: Tema = tema === 'plano' ? 'papel' : 'plano';
     document.documentElement.dataset.tema = siguiente;
+
+    if (!permite(consentimiento, 'preferencias')) {
+      try {
+        localStorage.removeItem(CLAVE_TEMA);
+      } catch {
+        // Nada que limpiar.
+      }
+      return;
+    }
 
     try {
       localStorage.setItem(CLAVE_TEMA, siguiente);
