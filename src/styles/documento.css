@@ -560,6 +560,34 @@
     color: var(--lapiz);
   }
 
+  /* ---------- Agenda, sello y medidor ---------- */
+
+  .agenda {
+    margin-block: 2rem;
+    min-height: 3rem;
+  }
+
+  .sello {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    padding: 0.625rem 1rem;
+    border: 2px solid var(--firma);
+    color: var(--firma);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    transform: rotate(-2deg);
+  }
+
+  .medidor {
+    display: block;
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+    color: var(--lapiz);
+  }
+
   /* ---------- Movimiento ---------- */
 
   /* El doble filete de la portada arranca sin trazo solo cuando va a animarse:

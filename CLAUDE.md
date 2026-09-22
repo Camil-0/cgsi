@@ -65,7 +65,7 @@ smooth scroll global, cursor personalizado, texto partido en titulares, marquesi
 | Movimiento | `gsap` ≥ 3.13 + `@gsap/react`. Plugins: **solo** ScrollTrigger y DrawSVGPlugin |
 | Datos | `firebase-admin` (Firestore), **solo** en el servidor |
 | Agenda | `@calcom/embed-react`, carga diferida |
-| Analítica | `@vercel/analytics`, `@vercel/speed-insights`, sin cookies |
+| Analítica | `@vercel/analytics`, `@vercel/speed-insights` y **PostHog**, todos sin cookies |
 | Validación | `zod` (entorno, webhooks, frontmatter) |
 | Pruebas | Vitest, Playwright, `@axe-core/playwright`, Lighthouse CI |
 | Paquetes | **pnpm**, lockfile versionado |
@@ -195,7 +195,14 @@ no tiene `vigenteDesde`.
 - **Mensajería:** interfaz `Mensajeria` con proveedores `evolution | cloud | ninguno`.
   Evolution **solo** para avisos internos al fundador desde un número secundario.
   Nunca se envían mensajes automáticos por WhatsApp a prospectos.
+- **Analítica sin cookies:** PostHog va con `persistence: 'memory'`, sin grabación de sesión y sin
+  autocaptura, y se carga en diferido. Por eso el sitio no lleva banner de consentimiento y la
+  política puede decir que la analítica no usa cookies. **Si algún día se identifica a un
+  visitante entre sesiones, hay que agregar aviso y consentimiento** (Parte A §7.5) y publicar una
+  versión nueva de la política.
 - **No se integran en la v1:** CRM, chat en vivo, píxeles publicitarios, newsletter.
+
+> Lo que está bloqueado por credenciales o por terceros vive en `TODO.md`, con los pasos concretos.
 
 ## 12. Seguridad (Parte B §B.11)
 

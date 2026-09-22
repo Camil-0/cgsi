@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BotonImprimir } from '@/components/documento/BotonImprimir';
+import { Analitica } from '@/components/analitica/Analitica';
 import { Movimiento } from '@/components/movimiento/Movimiento';
 import { ScriptMovimiento } from '@/components/movimiento/ScriptMovimiento';
 import { AplicarTema } from '@/components/tema/AplicarTema';
@@ -79,6 +80,11 @@ export default async function LayoutRaiz({ children, params }: Props) {
 
           {children}
         </NextIntlClientProvider>
+
+        <Analitica
+          clave={entornoPublico().NEXT_PUBLIC_POSTHOG_KEY}
+          host={entornoPublico().NEXT_PUBLIC_POSTHOG_HOST}
+        />
 
         <p className="hoja-pie">
           {t('sitio.razonSocial')} · {t('sitio.nit')} · {t('sitio.correo')}

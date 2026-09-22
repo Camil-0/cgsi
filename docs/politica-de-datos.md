@@ -130,6 +130,7 @@ Para operar usamos proveedores que actúan como encargados y pueden tratar datos
 |---|---|
 | Cal.com | Agenda de diagnósticos |
 | Vercel | Alojamiento del sitio y analítica anónima |
+| PostHog | Analítica del sitio, sin cookies y sin identificadores persistentes |
 | Google (Firebase y Workspace) | Registro de solicitudes y correo |
 | Meta (WhatsApp) | Conversaciones por WhatsApp |
 | Proveedor de servidor para mensajería interna | Avisos internos de nuevas citas al equipo de CGSI |

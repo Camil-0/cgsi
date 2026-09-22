@@ -23,6 +23,9 @@ const esquemaPublico = z.object({
   NEXT_PUBLIC_WHATSAPP_NUMERO: z.string().regex(soloDigitos).optional(),
   /** p. ej. `cgsi/diagnostico`. Obligatoria desde F4. */
   NEXT_PUBLIC_CAL_LINK: z.string().min(1).optional(),
+  /** Clave de proyecto de PostHog (`phc_…`). Sin ella, la analítica no se carga. */
+  NEXT_PUBLIC_POSTHOG_KEY: z.string().startsWith('phc_').optional(),
+  NEXT_PUBLIC_POSTHOG_HOST: z.url().optional(),
 });
 
 const proveedoresMensajeria = ['evolution', 'cloud', 'ninguno'] as const;
@@ -97,6 +100,8 @@ export const entornoPublico = memorizar(() =>
     NEXT_PUBLIC_BUILD_DATE: process.env.NEXT_PUBLIC_BUILD_DATE,
     NEXT_PUBLIC_WHATSAPP_NUMERO: process.env.NEXT_PUBLIC_WHATSAPP_NUMERO,
     NEXT_PUBLIC_CAL_LINK: process.env.NEXT_PUBLIC_CAL_LINK,
+    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
   }),
 );
 

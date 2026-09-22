@@ -13,6 +13,8 @@ env:
   # Valores de prueba: el sitio se construye contra el servidor local del pipeline.
   # El dominio real es un pendiente de lanzamiento (Parte A §11).
   NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3100
+  # Público y documentado en el brief (B.15). No es un secreto.
+  NEXT_PUBLIC_WHATSAPP_NUMERO: '573238134588'
 
 jobs:
   verificar:

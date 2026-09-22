@@ -48,6 +48,7 @@ export default defineConfig({
     timeout: 240_000,
     env: {
       NEXT_PUBLIC_SITE_URL: baseURL,
+      NEXT_PUBLIC_WHATSAPP_NUMERO: '573238134588',
     },
   },
 });

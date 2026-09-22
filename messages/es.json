@@ -28,6 +28,17 @@
       "cargo": "Fundador, CG Software Integration"
     }
   },
+  "contacto": {
+    "whatsapp": "Escribir por WhatsApp",
+    "whatsappTexto": "Hola, vengo del sitio de CGSI y quiero agendar un diagnóstico",
+    "cargarAgenda": "Cargar la agenda",
+    "tituloAgenda": "Agenda de diagnóstico",
+    "sello": "Recibido · {cuando} COT · Te escribimos en menos de una hora hábil"
+  },
+  "pie": {
+    "medida": "Esta página pesó {kb} KB y cargó en {segundos} s en tu conexión.",
+    "desdeCache": "Esta página se sirvió desde caché."
+  },
   "expedientes": {
     "encabezado": "Expediente {numero} — {titulo}",
     "lista": "Expedientes"
@@ -43,7 +54,7 @@
     "vistaPlano": "Vista Plano"
   },
   "base": {
-    "pendienteAgenda": "'{'PENDIENTE: agenda de Cal.com — se integra en F4'}'",
+    "pendienteAgenda": "'{'PENDIENTE: enlace del evento de Cal.com — ver TODO.md, punto 3'}'",
     "pendienteMensajes": "'{'PENDIENTE: mensajes de WhatsApp por estado — Parte A §3, IV'}'",
     "pendientePolitica": "'{'PENDIENTE: validación por abogado — Parte A §11'}'"
   }

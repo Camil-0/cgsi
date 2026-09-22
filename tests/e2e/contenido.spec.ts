@@ -9,9 +9,10 @@ test.describe('portada y franja', () => {
     await expect(page.locator('h1')).toHaveText('Tu empresa ya no cabe en WhatsApp y Excel.');
     await expect(page.locator('.membrete')).toHaveText('CG Software Integration');
 
-    await expect(page.locator('.cta-primario')).toHaveText('Agendar diagnóstico');
-    await expect(page.locator('.cta-microcopy')).toHaveText('30 minutos · sin costo');
-    await expect(page.locator('.cta-secundario')).toHaveText('Escribir por WhatsApp');
+    const portada = page.locator('.portada');
+    await expect(portada.locator('.cta-primario')).toHaveText('Agendar diagnóstico');
+    await expect(portada.locator('.cta-microcopy')).toHaveText('30 minutos · sin costo');
+    await expect(portada.locator('.cta-secundario')).toHaveText('Escribir por WhatsApp');
   });
 
   test('la franja lleva sus seis puntos y tres notas', async ({ page }) => {
@@ -81,9 +82,11 @@ test.describe('secciones', () => {
   test('VII lleva la agenda, el aviso de privacidad y siete aclaraciones', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page.locator('[data-pendiente="agenda-f4"]')).toBeVisible();
+    // Con `NEXT_PUBLIC_CAL_LINK` configurada entra el embed; sin ella, el pendiente.
+    await expect(page.locator('[data-agenda], [data-pendiente="agenda"]')).toBeVisible();
     await expect(page.locator('.aviso-privacidad')).toContainText('Autorizo a CG Software');
     await expect(page.locator('.faq h4')).toHaveCount(7);
+    await expect(page.locator('#proximos-pasos a[href^="https://wa.me/"]')).toHaveCount(1);
   });
 });
 

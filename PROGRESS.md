@@ -16,7 +16,7 @@ Ningún despliegue a producción sin revisión humana explícita.
 | F1 Sistema documento | 🟢 Cerrada | 22.09.2026 |
 | F2 Contenido | 🟢 Cerrada | 22.09.2026 |
 | F3 Movimiento | 🟢 Cerrada | 22.09.2026 |
-| F4 Integraciones | ⬜ Sin empezar | — |
+| F4 Integraciones | 🟡 Construida y probada; **su criterio de salida depende de credenciales** (`TODO.md`, puntos 3, 4 y 6) | — |
 | F5 SEO y memorandos | ⬜ Sin empezar | — |
 | F6 Endurecimiento | ⬜ Sin empezar | — |
 
@@ -69,6 +69,9 @@ Decisiones que el brief no cierra y que se resolvieron con el fundador antes de 
 
 | Dependencia | Tipo | Razón |
 |---|---|---|
+| `posthog-js` | Dependencia nueva | **Pedida por Camilo el 22.09.2026.** B.1 solo contempla la analítica de Vercel. Se configura sin cookies ni almacenamiento persistente (`persistence: 'memory'`), sin grabación de sesión y sin autocaptura, para que la política pueda seguir diciendo que la analítica no usa cookies (Parte A §7.5). Se carga en diferido y solo si hay clave: no toca el arranque. PostHog se agregó a la tabla de encargados de la política (§10) y a su fuente. |
+| `server-only` | Guardia de empaquetado | Es el mecanismo oficial para que un módulo de servidor reviente el build si alguien lo importa desde el cliente. Lo usan `firebase-admin`, `prospectos` y la mensajería, que es justo lo que B.1 exige que viva solo en el servidor. Pesa cero en el cliente. |
+| `pnpm.overrides.uuid: ^11.1.1` | Override, no dependencia nueva | `firebase-admin` arrastra `uuid` viejo a través de `@google-cloud/storage`, con una vulnerabilidad moderada (falta de control de límites del búfer en v3/v5/v6). Con el override, `pnpm audit` vuelve a quedar limpio. |
 | `pnpm.overrides.sharp: ^0.35.4` | Override, no dependencia nueva | Velite 0.4.0 pide `sharp ^0.34.5`, que arrastra dos vulnerabilidades altas heredadas de libvips y libheif (GHSA-rgj7-g3m4-5g8c y CVE-2026-33327/33328/35590/35591). Con el override, `pnpm audit --audit-level high` queda limpio y Velite sigue compilando. Se retira cuando Velite suba su rango. |
 
 ## Marcadores `{PENDIENTE}` abiertos
@@ -431,3 +434,93 @@ sin movimiento, que la figura marque estados al avanzar el scroll, y el presupue
 - [x] **Sin animaciones fuera del inventario:** las seis de B.6, cada una con su variante de
       movimiento reducido. Nada de pin, nada de smooth scroll, nada de texto partido.
 - [x] **Presupuesto respetado**, con la definición corregida y una prueba que lo vigila.
+
+---
+
+## F4 — Integraciones
+
+**Alcance (B.17):** WhatsApp, `AgendaCal` diferida, webhook → Firestore con TTL, adaptador
+Evolution, `Sello`, `MedidorCarga` y los scripts de titulares.
+**Criterio de salida:** reserva de prueba de principio a fin; aviso interno recibido.
+
+> **Estado: construida y probada, no cerrada.** El criterio de salida exige una reserva real y un
+> aviso real, y eso necesita la cuenta de Cal.com, el proyecto de Firebase y el número secundario
+> con Evolution. Los tres son de Camilo y están en `TODO.md` (puntos 3, 4 y 6). Todo lo demás
+> está hecho y cubierto por pruebas: cuando lleguen esas credenciales, solo hay que cargarlas.
+
+### Trabajo realizado
+
+**Webhook `POST /api/cal/webhook`** (runtime Node, por el HMAC)
+- Cuerpo crudo con tope de 64 KB; la firma se calcula sobre el crudo, nunca sobre el JSON
+  reserializado.
+- HMAC-SHA256 comparado con `timingSafeEqual` contra `x-cal-signature-256`. Si no coincide: 401.
+- Zod sobre el cuerpo. Si no valida: 400.
+- **Idempotente por `payload.uid`**, que es el id del documento. Cal.com no firma marca de tiempo,
+  así que un mensaje capturado podría reenviarse; la idempotencia lo neutraliza.
+- Si Firestore falla, responde 500 **a propósito**, para que Cal.com reintente: perder una cita es
+  peor que un reintento.
+- El aviso interno sale sin `await`, con tope de 3 s, y no bloquea la respuesta.
+
+**Prospectos en Firestore**
+- `prospectos/{uid}` con el documento de B.10, incluido el registro de consentimiento (fecha,
+  versión de la política y medio).
+- `expiraEn` = último contacto + 24 meses. Es el campo sobre el que corre el TTL, que es lo que
+  cumple la conservación sin trabajo manual.
+- Cada cambio de estado agrega un registro en `prospectos/{uid}/eventos`. Solo se agregan.
+
+**Mensajería**: interfaz `Mensajeria` con `evolution`, `cloud` y `ninguno`. Evolution **solo**
+para avisos internos al fundador, desde un número secundario. Cloud API queda implementada e
+inactiva. `ninguno` es el valor por defecto y solo registra: en desarrollo y en pruebas nadie
+manda un WhatsApp de verdad.
+
+**Interfaz**: `BotonWhatsApp` (solo `wa.me` con texto prellenado; el número comercial no toca
+ninguna API), `AgendaCal` que no descarga nada de Cal.com hasta el clic o la proximidad, `Sello`
+«Recibido» con hora real de Bogotá, y `MedidorCarga`, que mide de verdad con
+`PerformanceNavigationTiming` y dice «servida desde caché» cuando `transferSize` es 0.
+
+**Derechos de titulares**: `scripts/prospectos-exportar.ts` responde una consulta, y
+`scripts/prospectos-suprimir.ts` borra y deja constancia **sin datos personales** (una huella del
+correo, no el correo).
+
+**Healthcheck** `GET /api/salud`: dice qué integraciones están configuradas, con `true` o `false`,
+sin filtrar ningún valor. Sirve para el monitor de disponibilidad de `TODO.md`.
+
+### Analítica (pedida por Camilo, fuera de B.1)
+
+PostHog **sin cookies**: `persistence: 'memory'`, sin grabación de sesión, sin autocaptura y con
+`respect_dnt`. No queda ningún identificador cuando se cierra la pestaña, así que el sitio sigue
+sin necesitar banner de consentimiento y la política sigue siendo cierta cuando dice que la
+analítica no usa cookies. Se carga en diferido y solo si hay clave configurada.
+
+Se agregó PostHog a la tabla de encargados de la política (§10) y a su fuente en
+`docs/politica-de-datos.md`, porque trata datos fuera de Colombia y eso hay que declararlo.
+**Esto es un cambio en un documento legal: el abogado debe verlo en la misma revisión.**
+
+Vercel Web Analytics y Speed Insights quedan también, como pide B.1. Ninguno usa cookies.
+
+### Pruebas
+
+| Suite | Resultado |
+|---|---|
+| `pnpm test:unit` | **88 en verde** (26 nuevas: firma del webhook, esquemas, fechas COT, TTL de 24 meses y adaptador de mensajería con `fetch` simulado) |
+| `pnpm test:e2e` | **96 en verde** |
+| `pnpm test:a11y` | **7 en verde** |
+
+Las pruebas nuevas cubren lo que B.16 pide para esta fase: firma válida, inválida y **cuerpo
+alterado con la firma original**; rechazo de firmas de largo distinto sin reventar; esquemas Zod;
+cálculo de `expiraEn`, incluido el 29 de febrero; formateo en hora de Colombia cruzando el día; y
+el adaptador de mensajería contra un `fetch` simulado, incluido el caso «sin configurar».
+
+En e2e: el webhook nunca responde 200 a algo sin firmar, el healthcheck no filtra valores, el
+enlace de WhatsApp tiene el formato correcto y **la página no descarga nada de Cal.com al abrir**.
+
+### Presupuesto
+
+192,1 KB gzip / 166,3 KB brotli de JavaScript inicial: **+3,4 KB** sobre F3, que es todo el
+código de cliente de F4 más la analítica de Vercel. PostHog y Cal.com **no** están en el arranque.
+
+### Lo que falta para cerrar F4
+
+1. Cal.com configurado (`TODO.md`, punto 3) → reserva de prueba de principio a fin.
+2. Firebase configurado (punto 4) → que esa reserva quede guardada, con su TTL.
+3. Evolution con el número secundario (punto 6) → aviso interno recibido.
