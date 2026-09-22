@@ -1,0 +1,130 @@
+/* Impresión (B.14). El documento en pantalla y el documento impreso son el mismo
+   documento: carta, márgenes de una pulgada, Georgia y Calibri, tinta negra. */
+
+@media print {
+  @page {
+    size: letter;
+    margin: 1in;
+  }
+
+  :root,
+  [data-tema='papel'],
+  [data-tema='plano'] {
+    --papel: #ffffff;
+    --papel-2: #ffffff;
+    --tinta: #000000;
+    --grafito: #000000;
+    --lapiz: #333333;
+    --carbon: #000000;
+    --firma: #000000;
+    --texto-sobre-firma: #ffffff;
+    --tachado: #000000;
+    --agregado: #000000;
+
+    color-scheme: light;
+  }
+
+  body {
+    background: #ffffff;
+    color: #000000;
+    font-family: Calibri, system-ui, sans-serif;
+    font-size: 11pt;
+    line-height: 1.45;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: Georgia, serif;
+    break-after: avoid;
+  }
+
+  /* Fuera del papel: navegación, interruptor, agenda, WhatsApp y medidor (B.14) */
+  .indice,
+  .cajetin,
+  .barra,
+  .boton-barra,
+  .saltar,
+  [data-sin-imprimir] {
+    display: none !important;
+  }
+
+  .documento {
+    display: block;
+    max-width: none;
+    padding: 0;
+  }
+
+  /* Las notas al margen pasan a notas numeradas, en el flujo del texto */
+  .nota-cuerpo,
+  .nota-cuerpo[data-abierta='auto'],
+  .nota-cuerpo[data-abierta='no'],
+  .nota-cuerpo[data-abierta='si'] {
+    display: block;
+    float: none;
+    width: auto;
+    margin: 0.5em 0 0.5em 1.5em;
+    border-left: 0;
+    padding-left: 0;
+    font-size: 9.5pt;
+    break-inside: avoid;
+  }
+
+  .nota-llamada {
+    color: #000000;
+    font-weight: 700;
+  }
+
+  /* Los enlaces muestran su destino */
+  a[href^='http']::after,
+  a[href^='mailto']::after {
+    content: ' (' attr(href) ')';
+    font-family: Calibri, system-ui, sans-serif;
+    font-size: 9pt;
+    word-break: break-all;
+  }
+
+  a {
+    color: #000000;
+    text-decoration: underline;
+  }
+
+  section {
+    break-inside: auto;
+    padding-block: 0 0.75in;
+  }
+
+  /* Encabezado y pie de cada hoja, como en los documentos de CGSI.
+     Van con `position: fixed` porque las cajas de margen de `@page` todavía no
+     están soportadas en navegadores. */
+  .hoja-encabezado,
+  .hoja-pie {
+    display: block;
+    position: fixed;
+    inset-inline: 0;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 8pt;
+    letter-spacing: 0.02em;
+    color: #333333;
+  }
+
+  .hoja-encabezado {
+    top: 0;
+    border-bottom: 0.5pt solid #000000;
+    padding-bottom: 4pt;
+  }
+
+  .hoja-pie {
+    bottom: 0;
+    border-top: 0.5pt solid #000000;
+    padding-top: 4pt;
+  }
+}
+
+/* En pantalla, el encabezado y el pie de hoja no existen */
+@media screen {
+  .hoja-encabezado,
+  .hoja-pie {
+    display: none;
+  }
+}

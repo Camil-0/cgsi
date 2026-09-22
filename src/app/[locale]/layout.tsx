@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { BotonImprimir } from '@/components/documento/BotonImprimir';
+import { InterruptorPapelPlano } from '@/components/tema/InterruptorPapelPlano';
+import { ScriptTema } from '@/components/tema/ScriptTema';
 import { etiquetaIdioma, routing } from '@/i18n/routing';
 import { entornoPublico } from '@/lib/env';
 import { claseFuentes } from '@/lib/fuentes';
@@ -39,11 +42,39 @@ export default async function LayoutRaiz({ children, params }: Props) {
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
 
+  const t = await getTranslations();
+
   return (
     <html lang={etiquetaIdioma[locale]} className={claseFuentes}>
       <body>
-        {/* ScriptTema (B.3) e IndiceSecciones (B.5) entran en F1. */}
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <ScriptTema />
+
+        {/* Sin JavaScript las notas quedan visibles: nunca hay contenido
+            atrapado detrás de un botón que no responde. */}
+        <noscript>
+          <style>{'.nota-cuerpo{display:block !important}'}</style>
+        </noscript>
+
+        <p className="hoja-encabezado">
+          {t('sitio.nombre')} · {t('sitio.referencia')}
+        </p>
+
+        <a className="saltar" href="#contenido">
+          {t('documento.saltarAlContenido')}
+        </a>
+
+        <NextIntlClientProvider>
+          <div className="barra" data-sin-imprimir>
+            <InterruptorPapelPlano />
+            <BotonImprimir />
+          </div>
+
+          {children}
+        </NextIntlClientProvider>
+
+        <p className="hoja-pie">
+          {t('sitio.razonSocial')} · {t('sitio.nit')} · {t('base.pendienteCorreo')}
+        </p>
       </body>
     </html>
   );

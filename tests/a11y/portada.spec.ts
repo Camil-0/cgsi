@@ -5,15 +5,45 @@ import { expect, test } from '@playwright/test';
 
 const etiquetas = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
-for (const tema of ['light', 'dark'] as const) {
-  test(`la portada no tiene violaciones de axe (${tema === 'light' ? 'Papel' : 'Plano'})`, async ({
-    page,
-  }) => {
-    await page.emulateMedia({ colorScheme: tema });
-    await page.goto('/');
+const rutas = [
+  { nombre: 'documento', ruta: '/' },
+  { nombre: 'sistema', ruta: '/sistema' },
+];
 
-    const resultado = await new AxeBuilder({ page }).withTags(etiquetas).analyze();
+const temas = [
+  { nombre: 'Papel', esquema: 'light' },
+  { nombre: 'Plano', esquema: 'dark' },
+] as const;
 
-    expect(resultado.violations).toEqual([]);
-  });
+for (const { nombre, ruta } of rutas) {
+  for (const tema of temas) {
+    test(`${nombre} sin violaciones de axe (${tema.nombre})`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: tema.esquema });
+      await page.goto(ruta);
+
+      const resultado = await new AxeBuilder({ page }).withTags(etiquetas).analyze();
+
+      expect(resultado.violations).toEqual([]);
+    });
+  }
 }
+
+test('el documento se recorre completo con el teclado', async ({ page }) => {
+  await page.goto('/');
+
+  const alcanzados: string[] = [];
+
+  for (let paso = 0; paso < 12; paso += 1) {
+    await page.keyboard.press('Tab');
+    alcanzados.push(
+      await page.evaluate(() => {
+        const activo = document.activeElement as HTMLElement | null;
+        return activo ? `${activo.tagName}.${activo.className}`.trim() : 'ninguno';
+      }),
+    );
+  }
+
+  expect(alcanzados.some((elemento) => elemento.includes('saltar'))).toBe(true);
+  expect(alcanzados.some((elemento) => elemento.includes('interruptor-tema'))).toBe(true);
+  expect(alcanzados.some((elemento) => elemento.includes('indice-enlace'))).toBe(true);
+});

@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 @import './tokens.css';
+@import './documento.css';
+@import './print.css';
 
 /* Los tokens se exponen a Tailwind v4 con @theme (B.3).
    `inline` porque el valor real vive en la variable CSS y cambia con el tema. */

@@ -1,0 +1,275 @@
+/* Sistema documento (F1): retícula de la Parte A §2.3 y componentes de B.5.
+   Ningún color escrito a mano: todo sale de los tokens. */
+
+@layer components {
+  /* ---------- Retícula ---------- */
+
+  .documento {
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 1.5rem;
+    padding-inline: max(1.5rem, env(safe-area-inset-left), env(safe-area-inset-right));
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 1024px) {
+    .documento {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      max-width: 90rem;
+      margin-inline: auto;
+      padding-inline: 3rem;
+    }
+
+    /* Columnas 1–2: índice y cajetín. Columnas 3–12: el documento, que adentro
+       reparte 7 columnas de texto y 3 de notas al margen. */
+    .documento > .columna-indice {
+      grid-column: 1 / span 2;
+      position: sticky;
+      top: 3rem;
+      align-self: start;
+      height: fit-content;
+    }
+
+    .documento > .documento-cuerpo {
+      grid-column: 3 / span 10;
+    }
+  }
+
+  /* ---------- Salto al contenido (B.13) ---------- */
+
+  .saltar {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 50;
+    background-color: var(--firma);
+    color: var(--texto-sobre-firma);
+    padding: 0.75rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+
+  .saltar:focus {
+    left: 0;
+  }
+
+  /* ---------- Índice ---------- */
+
+  .indice {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: var(--papel);
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--papel-2);
+  }
+
+  .indice-lista {
+    display: flex;
+    gap: 0.25rem;
+    overflow-x: auto;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    scrollbar-width: none;
+  }
+
+  .indice-lista::-webkit-scrollbar {
+    display: none;
+  }
+
+  .indice-enlace {
+    display: flex;
+    align-items: center;
+    /* Objetivo táctil de 44 px (B.13) */
+    min-height: 44px;
+    min-width: 44px;
+    justify-content: center;
+    padding-inline: 0.5rem;
+    color: var(--lapiz);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+
+  .indice-titulo {
+    display: none;
+  }
+
+  .indice-enlace[aria-current='location'] {
+    color: var(--firma);
+  }
+
+  @media (min-width: 1024px) {
+    .indice {
+      position: static;
+      border-bottom: 0;
+      padding-block: 0;
+      background-color: transparent;
+    }
+
+    .indice-lista {
+      flex-direction: column;
+      gap: 0;
+      overflow: visible;
+    }
+
+    .indice-enlace {
+      justify-content: flex-start;
+      gap: 0.625rem;
+      padding-inline: 0;
+      min-width: 0;
+    }
+
+    .indice-numeral {
+      width: 2.25rem;
+      flex: none;
+      color: var(--carbon);
+    }
+
+    .indice-titulo {
+      display: inline;
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      letter-spacing: normal;
+    }
+
+    .indice-enlace[aria-current='location'] .indice-numeral {
+      color: var(--firma);
+    }
+  }
+
+  /* ---------- Cajetín ---------- */
+
+  .cajetin {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 30;
+    background-color: var(--papel-2);
+    border-top: 1px solid var(--carbon);
+    color: var(--lapiz);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+    text-align: center;
+    padding: 0.5rem 1rem calc(0.5rem + env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 1024px) {
+    .cajetin {
+      position: static;
+      background-color: transparent;
+      border-top: 0;
+      border-left: 3px solid var(--carbon);
+      text-align: left;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      padding: 0.25rem 0 0.25rem 0.75rem;
+      margin-top: 3rem;
+    }
+  }
+
+  /* ---------- Barra de herramientas ---------- */
+
+  .barra {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0.75rem max(1.5rem, env(safe-area-inset-right)) 0 1.5rem;
+  }
+
+  /* ---------- Notas al margen ---------- */
+
+  .nota {
+    position: relative;
+  }
+
+  .nota-llamada {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--firma);
+    background: none;
+    border: 0;
+    padding: 0 0.125rem;
+    cursor: pointer;
+  }
+
+  .nota-cuerpo {
+    display: none;
+    margin-block: 0.75rem;
+    padding-left: 0.75rem;
+    border-left: 1px solid var(--lapiz);
+    color: var(--lapiz);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .nota-cuerpo[data-abierta='si'] {
+    display: block;
+  }
+
+  .nota-numero {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    margin-right: 0.375rem;
+    color: var(--firma);
+  }
+
+  @media (min-width: 1024px) {
+    /* Columnas 10–12: la nota flota fuera de la columna de texto y se alinea
+       con la línea donde está su llamada (Parte A §2.3). */
+    .nota-cuerpo[data-abierta='auto'],
+    .nota-cuerpo[data-abierta='si'] {
+      display: block;
+      float: right;
+      clear: right;
+      width: 43%;
+      margin-right: -45%;
+      margin-block: 0;
+      font-size: 0.875rem;
+    }
+
+    .nota-llamada {
+      cursor: default;
+    }
+  }
+
+  /* ---------- Diff ---------- */
+
+  .diff {
+    border-left: 1px solid var(--papel-2);
+    padding-left: 1rem;
+  }
+
+  /* ---------- Marcadores pendientes ---------- */
+
+  .pendiente {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--lapiz);
+    border: 1px dashed var(--lapiz);
+    padding: 0.75rem 1rem;
+    display: block;
+  }
+
+  /* ---------- Interruptor de tema ---------- */
+
+  .boton-barra {
+    min-height: 44px;
+    padding-inline: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--lapiz);
+    background: none;
+    border: 1px solid var(--papel-2);
+    cursor: pointer;
+  }
+
+  .interruptor-tema[aria-pressed='true'] {
+    color: var(--firma);
+    border-color: var(--firma);
+  }
+}

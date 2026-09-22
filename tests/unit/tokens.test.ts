@@ -81,9 +81,13 @@ function archivosFuente(directorio: string): string[] {
 }
 
 describe('regla «ningún color escrito a mano» (B.3)', () => {
-  it('solo tokens.css contiene valores hex', () => {
+  // `print.css` también declara color: redefine los tokens para el papel impreso
+  // (blanco y tinta negra, B.14). Son los dos únicos archivos que pueden hacerlo.
+  const declaranColor = [join('styles', 'tokens.css'), join('styles', 'print.css')];
+
+  it('solo los archivos de tokens contienen valores hex', () => {
     const conHex = archivosFuente(join(raiz, 'src'))
-      .filter((ruta) => !ruta.endsWith(join('styles', 'tokens.css')))
+      .filter((ruta) => !declaranColor.some((archivo) => ruta.endsWith(archivo)))
       .filter((ruta) => /#[0-9a-fA-F]{3,8}\b/.test(readFileSync(ruta, 'utf8')))
       .map((ruta) => ruta.slice(raiz.length));
 

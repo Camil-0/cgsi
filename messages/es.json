@@ -2,9 +2,54 @@
   "sitio": {
     "nombre": "CG Software Integration",
     "razonSocial": "CG Software Integration S.A.S.",
-    "referencia": "Ref. CSI-2026-WEB-001"
+    "referencia": "Ref. CSI-2026-WEB-001",
+    "nit": "NIT 901.983.287",
+    "ciudad": "Bogotá D.C."
+  },
+  "documento": {
+    "saltarAlContenido": "Saltar al contenido",
+    "indice": "Índice del documento",
+    "descargarPdf": "Descargar como PDF",
+    "cajetin": {
+      "etiqueta": "Datos del documento",
+      "texto": "Ref. CSI-2026-WEB-001 · Rev. {revision} · {fecha} · Pág. {pagina}/VII"
+    },
+    "nota": {
+      "llamada": "Nota {n}"
+    },
+    "firma": {
+      "nombre": "Camilo Charris C.",
+      "cargo": "Fundador, CG Software Integration"
+    },
+    "secciones": {
+      "punto-de-partida": "Punto de partida",
+      "alcance": "Alcance",
+      "como-trabajamos": "Cómo trabajamos",
+      "expedientes": "Expedientes",
+      "inversion": "Inversión",
+      "lo-que-firmamos": "Lo que firmamos",
+      "proximos-pasos": "Próximos pasos"
+    }
+  },
+  "tema": {
+    "vistaPlano": "Vista Plano"
   },
   "base": {
-    "pendienteDocumento": "'{PENDIENTE: documento I–VII — Parte A §3, se escribe en F2}'"
+    "pendienteSeccion": "'{'PENDIENTE: copy de la sección {numeral} — Parte A §3, se escribe en F2'}'",
+    "pendientePortada": "'{'PENDIENTE: portada y franja «Lo que siempre incluye» — Parte A §3, se escriben en F2'}'",
+    "pendienteCorreo": "'{'PENDIENTE: correo del dominio'}'"
+  },
+  "sistema": {
+    "titulo": "Sistema documento",
+    "descripcion": "Página interna de referencia: los componentes de B.5 con ejemplos tomados del brief. No se indexa.",
+    "notaTitulo": "Nota de fundamento",
+    "notaParrafo": "Soporte incluido después del lanzamiento.",
+    "notaTexto": "El período se fija en cada contrato: tres meses en nuestro contrato tipo.",
+    "diffTitulo": "Diff del proceso de pedidos de Essenza",
+    "diffQuita1": "El pedido llega por WhatsApp y alguien lo copia en un cuaderno.",
+    "diffAgrega1": "El pedido entra al sistema y el cliente recibe confirmación automática.",
+    "diffQuita2": "Cada mañana se calcula a mano qué flores comprar.",
+    "diffAgrega2": "La vista de producción suma las flores de cada arreglo del día.",
+    "firmaTitulo": "Firma"
   }
 }
