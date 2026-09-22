@@ -29,6 +29,8 @@
     }
   },
   "contacto": {
+    "agendar": "Agendar diagnóstico",
+    "agendarMicrocopy": "30 minutos · sin costo",
     "whatsapp": "Escribir por WhatsApp",
     "whatsappTexto": "Hola, vengo del sitio de CGSI y quiero agendar un diagnóstico",
     "cargarAgenda": "Cargar la agenda",
@@ -73,6 +75,14 @@
     "encabezado": "Expediente {numero} — {titulo}",
     "lista": "Expedientes"
   },
+  "memorandos": {
+    "titulo": "Memorandos",
+    "numero": "Memorando N.º {numero}",
+    "asunto": "Asunto",
+    "fecha": "Fecha",
+    "volver": "Volver a los memorandos",
+    "inicio": "Documento"
+  },
   "legal": {
     "vigencia": "Versión {version} · Vigente desde {fecha}"
   },
@@ -86,6 +96,7 @@
   "base": {
     "pendienteAgenda": "'{'PENDIENTE: enlace del evento de Cal.com — ver TODO.md, punto 3'}'",
     "pendienteMensajes": "'{'PENDIENTE: mensajes de WhatsApp por estado — Parte A §3, IV'}'",
-    "pendientePolitica": "'{'PENDIENTE: validación por abogado — Parte A §11'}'"
+    "pendientePolitica": "'{'PENDIENTE: validación por abogado — Parte A §11'}'",
+    "pendienteMemorandos": "'{'PENDIENTE: los primeros memorandos — Parte A §5 y §9'}'"
   }
 }

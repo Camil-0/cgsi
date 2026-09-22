@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { legal } from '#contenido';
 import { DobleFilete } from '@/components/documento/DobleFilete';
 import { Mdx } from '@/components/documento/Mdx';
+import { alternativas } from '@/lib/seo';
 
 import type { Metadata } from 'next';
 
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: documento.titulo,
-    alternates: { canonical: `/${RUTA}` },
+    alternates: alternativas(`/${RUTA}`),
   };
 }
 

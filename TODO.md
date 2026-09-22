@@ -144,6 +144,11 @@ secundario, solo para avisarte a ti de cada cita.
 
 **Sale de aquí:** `GOOGLE_SITE_VERIFICATION`, `BING_SITE_VERIFICATION`
 
+3. Con el sitio ya en su dominio, pasar la portada y un memorando por el
+   [validador de resultados enriquecidos](https://search.google.com/test/rich-results) y por el
+   [validador de schema.org](https://validator.schema.org/). Es el criterio de salida de F5 y
+   necesita una URL pública: en local está verificado con pruebas, pero no con el validador.
+
 ---
 
 ## 9. Legal y contenido — bloquea el lanzamiento

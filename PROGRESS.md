@@ -17,7 +17,7 @@ Ningún despliegue a producción sin revisión humana explícita.
 | F2 Contenido | 🟢 Cerrada | 22.09.2026 |
 | F3 Movimiento | 🟢 Cerrada | 22.09.2026 |
 | F4 Integraciones | 🟡 Construida y probada; **su criterio de salida depende de credenciales** (`TODO.md`, puntos 3, 4 y 6) | — |
-| F5 SEO y memorandos | ⬜ Sin empezar | — |
+| F5 SEO y memorandos | 🟡 Construida y verificada con pruebas; **falta correr el validador oficial**, que necesita una URL pública | — |
 | F6 Endurecimiento | ⬜ Sin empezar | — |
 
 ---
@@ -567,3 +567,65 @@ Del review de interfaz salieron además: `overscroll-behavior: contain` en el di
 1. Cal.com configurado (`TODO.md`, punto 3) → reserva de prueba de principio a fin.
 2. Firebase configurado (punto 4) → que esa reserva quede guardada, con su TTL.
 3. Evolution con el número secundario (punto 6) → aviso interno recibido.
+
+---
+
+## F5 — SEO y memorandos
+
+**Alcance (B.17):** colección de memorandos, metadata, JSON-LD, sitemap, RSS y OG.
+**Criterio de salida:** validadores de datos estructurados sin errores.
+
+### Trabajo realizado
+
+**Datos estructurados** (`src/lib/seo.ts`): `Organization` con razón social, NIT y ciudad —**sin
+la dirección de la calle**, como exige B.9; la dirección completa vive en la política, que es
+donde la ley la pide—, `WebSite`, `BlogPosting` con autor como `Person`, `BreadcrumbList` y
+`FAQPage`.
+
+**El FAQ no se escribe dos veces.** Las siete «Aclaraciones frecuentes» del JSON-LD se extraen del
+mismo MDX que se lee en pantalla, igual que la descripción de la portada, que es el subtítulo de
+la Parte A §3. Una prueba compara las preguntas del marcado contra las de la página: si alguien
+edita una y no la otra, falla.
+
+**Metadata:** título con el formato `{Título} · CG Software Integration`, descripción recortada a
+160 caracteres por palabra —nunca a mitad de una—, canónica en cada ruta y `hreflang` listo para
+cuando exista otro idioma. Verificación de Google y Bing desde variables de entorno.
+
+**Descubrimiento:** `sitemap.xml` y `rss.xml` **solo con lo publicado** —un borrador no aparece en
+ninguno de los dos, ni tiene página—, y `robots.txt` que bloquea `/api/`.
+
+**Imagen OG** de 1200×630 en estilo Papel: membrete, el título real del documento, doble filete y
+la referencia. La fuente se baja de Google en el build; si la red falla, se compone con la que
+trae `next/og` en vez de romper el build. Los colores van explícitos porque satori no lee
+variables CSS, y una prueba verifica que sigan siendo los de `tokens.css`.
+
+**Memorandos:** listado y página por memorando, con el cajetín del formato de §5 (número, Para,
+De, Fecha, Asunto) y el cierre con la invitación al diagnóstico. **Todavía no hay ninguno
+escrito** —es un pendiente de Camilo (Parte A §9)—, así que el listado muestra su marcador en
+lugar de inventar contenido.
+
+**Un bug que encontró una prueba.** Next fusiona la metadata por clave de primer nivel: una página
+que declara `alternates` **reemplaza entero** el del layout, así que el `hreflang` desaparecía en
+todas las rutas menos la raíz. Ahora hay un ayudante `alternativas(ruta)` que arma canónica e
+idiomas juntos, y todas las páginas lo usan.
+
+### Pruebas
+
+| Suite | Resultado |
+|---|---|
+| `pnpm test:unit` | **117 en verde** (13 nuevas de SEO) |
+| `pnpm test:e2e` | **148 en verde** |
+| `pnpm test:a11y` | **9 en verde** |
+
+Las nuevas verifican: que el marcado no publique la dirección de la calle, que no invente campos
+que el brief no da, que el FAQ estructurado coincida con el de la página, que la descripción sea
+el subtítulo real y no pase de 160, que el sitemap y el RSS solo lleven lo publicado, y que la
+imagen OG se sirva como PNG de 1200×630 —leyendo el ancho y el alto de la cabecera del archivo.
+
+### Por qué F5 no está cerrada
+
+El criterio de salida es **«validadores de datos estructurados sin errores»**, y los validadores
+de Google y de schema.org piden una **URL pública**. Lo que se puede verificar sin publicar ya
+está verificado con pruebas: tipos, campos obligatorios, coherencia con la página y ausencia de lo
+que el brief prohíbe. Falta pasar el validador oficial cuando el sitio esté en un dominio
+(`TODO.md`, puntos 2 y 7). También faltan los primeros memorandos, que son contenido de Camilo.

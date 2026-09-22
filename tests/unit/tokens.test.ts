@@ -81,9 +81,16 @@ function archivosFuente(directorio: string): string[] {
 }
 
 describe('regla «ningún color escrito a mano» (B.3)', () => {
-  // `print.css` también declara color: redefine los tokens para el papel impreso
-  // (blanco y tinta negra, B.14). Son los dos únicos archivos que pueden hacerlo.
-  const declaranColor = [join('styles', 'tokens.css'), join('styles', 'print.css')];
+  // Tres excepciones, cada una con su razón:
+  // - `tokens.css` es la fuente.
+  // - `print.css` redefine los tokens para el papel impreso (B.14).
+  // - `LienzoOg.tsx` lo compone satori, que no lee variables CSS; que esos hex
+  //   sigan siendo los de `tokens.css` lo verifica `tests/unit/seo.test.ts`.
+  const declaranColor = [
+    join('styles', 'tokens.css'),
+    join('styles', 'print.css'),
+    join('seo', 'LienzoOg.tsx'),
+  ];
 
   it('solo los archivos de tokens contienen valores hex', () => {
     const conHex = archivosFuente(join(raiz, 'src'))

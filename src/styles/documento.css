@@ -597,6 +597,61 @@
     color: var(--lapiz);
   }
 
+  /* ---------- Memorandos ---------- */
+
+  .lista-memorandos {
+    list-style: none;
+    margin: 3rem 0 0;
+    padding: 0;
+  }
+
+  .memorando-fila {
+    padding-block: 2rem;
+    border-bottom: 1px solid var(--papel-2);
+    max-width: var(--container-medida);
+  }
+
+  .memorando-numero {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--lapiz);
+  }
+
+  .memorando-titulo {
+    margin-top: 0.5rem;
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--tinta);
+  }
+
+  .memorando-titulo a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .memorando-titulo a:hover {
+    color: var(--firma);
+  }
+
+  .memorando-resumen {
+    margin-top: 0.75rem;
+  }
+
+  .memorando-meta {
+    margin-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--lapiz);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cierre-memorando {
+    margin-top: 4rem;
+    padding-top: 1rem;
+  }
+
   /* ---------- Aviso de cookies ---------- */
 
   .aviso-cookies {

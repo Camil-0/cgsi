@@ -10,8 +10,9 @@ import { AplicarTema } from '@/components/tema/AplicarTema';
 import { InterruptorPapelPlano } from '@/components/tema/InterruptorPapelPlano';
 import { ScriptTema } from '@/components/tema/ScriptTema';
 import { etiquetaIdioma, routing } from '@/i18n/routing';
-import { entornoPublico } from '@/lib/env';
+import { entornoPublico, entornoServidor } from '@/lib/env';
 import { versionPolitica } from '@/lib/politica';
+import { alternativas } from '@/lib/seo';
 import { claseFuentes } from '@/lib/fuentes';
 import '@/styles/globals.css';
 
@@ -36,10 +37,25 @@ export async function generateMetadata({ params }: Omit<Props, 'children'>): Pro
   setRequestLocale(locale);
   const t = await getTranslations('sitio');
 
+  const env = entornoPublico();
+  const servidor = entornoServidor();
+
   return {
-    metadataBase: new URL(entornoPublico().NEXT_PUBLIC_SITE_URL),
+    metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
     title: { default: t('nombre'), template: `%s · ${t('nombre')}` },
-    alternates: { canonical: '/' },
+    alternates: alternativas('/'),
+    openGraph: {
+      type: 'website',
+      siteName: t('nombre'),
+      locale: 'es_CO',
+      url: '/',
+    },
+    verification: {
+      google: servidor.GOOGLE_SITE_VERIFICATION,
+      other: servidor.BING_SITE_VERIFICATION
+        ? { 'msvalidate.01': servidor.BING_SITE_VERIFICATION }
+        : undefined,
+    },
   };
 }
 

@@ -22,6 +22,9 @@ const documento = defineCollection({
     titulo: s.string(),
     slug: s.slug('documento'),
     cuerpo: s.mdx(),
+    /** El MDX sin compilar. De aquí salen la descripción y el FAQ del JSON-LD (B.9),
+     *  para no tener el mismo texto escrito en dos sitios. */
+    crudo: s.raw(),
   }),
 });
 
