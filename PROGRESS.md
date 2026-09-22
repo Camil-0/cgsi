@@ -14,7 +14,7 @@ Ningún despliegue a producción sin revisión humana explícita.
 |---|---|---|
 | F0 Base | 🟢 Cerrada y revisada | 21.09.2026 |
 | F1 Sistema documento | 🟢 Cerrada | 22.09.2026 |
-| F2 Contenido | ⬜ Sin empezar | — |
+| F2 Contenido | 🟢 Cerrada | 22.09.2026 |
 | F3 Movimiento | ⬜ Sin empezar | — |
 | F4 Integraciones | ⬜ Sin empezar | — |
 | F5 SEO y memorandos | ⬜ Sin empezar | — |
@@ -53,6 +53,12 @@ Decisiones que el brief no cierra y que se resolvieron con el fundador antes de 
 | B.5 Tabla de componentes | No incluye un botón de impresión | Se agregó `BotonImprimir` | La Parte A §4.5 y B.14 piden un botón «Descargar como PDF» que llame a `window.print()`. |
 | B.2 Rutas | No contempla una página de sistema | Se agregó `/sistema`, con `noindex` | `Nota` y `Diff` no tienen contenido real hasta F2 y el criterio de salida de F1 exige probarlos con teclado y con axe. Es una página interna de referencia; se reevalúa en F6. |
 | B.14 Impresión | Notas al margen como notas al pie | Notas numeradas en el flujo, después de su párrafo | Las notas al pie reales necesitan `float: footnote` de CSS Paged Media, que ningún navegador implementa. El encabezado y el pie de hoja usan `position: fixed` por la misma razón. |
+| B.2 Ruta `/sistema` | — | **Retirada en F2** | Existía solo para poder probar `Nota` y `Diff` sin contenido real. Ya están en el documento, así que la página sobraba. La deuda de F1 queda saldada. |
+| B.5 Tabla de componentes | No contempla la portada ni la franja | Se agregaron `Cta`, `Destinatario`, `Franja`, `Acciones`, `AlMargen` y `Faq` | El copy de la Parte A §3 los pide: llamados a la acción con microcopy, bloque «Para / De», franja «Lo que siempre incluye», anotación al margen en mono y «Aclaraciones frecuentes». Ninguno lleva texto escrito a mano: todo viene del MDX. |
+| B.8 Render de MDX | No especifica cómo | `new Function` sobre el cuerpo que compila Velite | Es el patrón de Velite. Corre solo en el servidor, así que la CSP del navegador (B.11) no necesita `unsafe-eval`. |
+| Parte A §3, pie | «Página N de VII · Rev. {versión}» dentro del pie | Lo muestra el cajetín | Es el mismo dato y el cajetín ya lo calcula en vivo. Repetirlo en el pie sería una segunda fuente que se puede desincronizar. |
+| Parte A §3, VII | «[Agenda Cal.com embebida] · [Escribir por WhatsApp]» | Hueco marcado `{PENDIENTE}` | La agenda y el botón de WhatsApp son F4. El hueco se ve, en vez de fingir una agenda que no existe. |
+| Parte A §4.8 | «un enlace al índice», sin texto | «Volver al índice» | El brief no da la etiqueta. Es funcional, no una afirmación. |
 
 ## Dependencias fuera de B.1
 
@@ -64,9 +70,12 @@ Decisiones que el brief no cierra y que se resolvieron con el fundador antes de 
 
 | Marcador | Dónde | Quién lo resuelve | Bloquea |
 |---|---|---|---|
-| `{PENDIENTE: portada y franja}` y `{PENDIENTE: copy de la sección N}` | `messages/es.json` → `base.*`, visibles en el documento | El agente, en F2 | Nada. Desaparecen al entrar el copy de la Parte A §3. |
-| `{PENDIENTE: dominio}` | `NEXT_PUBLIC_SITE_URL`, canónicas, JSON-LD, pie | Camilo | Lanzamiento (Parte A §11). Mientras tanto: `http://localhost:3000` en desarrollo y `http://127.0.0.1:3100` en CI. |
-| `{PENDIENTE: correo del dominio}` | Pie, política de datos, JSON-LD | Camilo | Lanzamiento. El sitio no sale con `@gmail`. |
+| `{PENDIENTE: agenda de Cal.com}` | Sección VII, componente `Agenda` | El agente, en F4 | Nada. |
+| `{PENDIENTE: mensajes de WhatsApp por estado}` | Fig. 1 del expediente Essenza | Camilo | Nada en el build. La Parte A §3 pide el mensaje que recibe el cliente en cada estado, pero no los transcribe. |
+| `{PENDIENTE: testimonio del Anexo 2}` | `content/es/expedientes/essenza.mdx` | Camilo | Lanzamiento. El texto del Anexo 2 no está en el brief. |
+| `{PENDIENTE: validación legal y fecha de vigencia}` | Cabeza de `/politica-de-datos` | Camilo y abogado | **Lanzamiento.** Ver el riesgo de la fecha de vigencia, abajo. |
+| `{PENDIENTE: dominio}` | `NEXT_PUBLIC_SITE_URL`, canónicas, JSON-LD | Camilo | Lanzamiento (Parte A §11). Mientras tanto: `http://localhost:3000` en desarrollo y `http://127.0.0.1:3100` en CI. |
+| Correo del dominio | Pie del sitio, política de datos, JSON-LD | Camilo | Lanzamiento. Hoy se publica `cgsoftwareintegrations@gmail.com`, que es el correo que la política ya declara; hay que cambiarlo por el del dominio antes de salir (Parte A §9). |
 | `{PENDIENTE: enlace del evento Cal.com}` | `NEXT_PUBLIC_CAL_LINK` | Camilo | F4 |
 | `{PENDIENTE: fecha de vigencia de la política}` | `content/es/legal/politica-de-datos.mdx` | Camilo y abogado | F2: el build falla sin `vigenteDesde`. |
 | `{PENDIENTE: número secundario Evolution}` | `EVOLUTION_*`, `NOTIFICACIONES_DESTINO` | Camilo | F4 |
@@ -83,6 +92,8 @@ Esta tabla solo lista los que dejan un marcador visible en el código o bloquean
 |---|---|---|
 | **Presupuesto de JS.** B.12 fija ≤ 120 KB comprimidos de JS inicial en la página principal. La base de Next 16 + React 19, con la página vacía, ya va en **178,9 KB gzip / 154,3 KB brotli** (7 scripts, 586,1 KB sin comprimir). Quitar `NextIntlClientProvider` del layout solo baja 9,9 KB: el peso es del framework, no del contenido. Con F1 cerrada va en **182,2 KB gzip / 157,1 KB brotli**: los cuatro componentes de cliente sumaron 3,3 KB. | Medido el 21 y el 22.09.2026 sobre el build de producción, sumando los `<script src>` de `/`. | **F3**, cuyo criterio de salida es el presupuesto. Camilo decidió el 22.09.2026 esperar a F3 y evaluar allí la carga diferida. Caminos a evaluar allí: dar traducciones a los componentes de cliente por props en vez de proveedor, revisar el build de Turbopack contra el de webpack, y confirmar con qué compresión se mide el umbral. Si el piso del framework no baja de 120 KB, hay que renegociar el número con el fundador, no maquillar la medición. |
 | ~~Contraste del modo Plano~~ | **Resuelto en F1.** Ver la tabla de medición más abajo: los diez tokens pasan AA en las dos superficies. | — |
+| **Fecha de vigencia de la política.** B.8 hace fallar el build si `vigenteDesde` está vacío, y la fuente (`docs/politica-de-datos.md`) trae el marcador `{FECHA_DE_PUBLICACION}`. Para no dejar la fase bloqueada, el MDX lleva **22.09.2026 como fecha provisional** y la página muestra, arriba del todo, que está pendiente de validación legal y de su fecha definitiva. | Decidido el 22.09.2026 por el agente, con aviso visible en la página. | **Antes del lanzamiento.** Camilo y el abogado fijan la fecha real; hay que cambiarla en `content/es/legal/politica-de-datos.mdx` y quitar el aviso. El gate de F6 no debe pasar con la fecha provisional. |
+| **El pie enlaza a `/memorandos`, que todavía no existe.** El enlace es copy literal de la Parte A §3 y hoy cae en el folio no encontrado. | — | **F5**, que crea la colección y la ruta. |
 
 ---
 
@@ -251,3 +262,71 @@ móvil; el interruptor de tema se opera con teclado. El foco visible se verifica
 Los títulos de las siete secciones están hoy en `messages/es.json`, porque el índice los necesita
 y todavía no hay MDX. En F2 pasan al frontmatter de `content/es/documento/*.mdx` y tanto el índice
 como las secciones los leen desde Velite. Mientras tanto no hay dos fuentes: `messages` es la única.
+
+_Cerrado en F2: los títulos viven en el frontmatter y `messages/es.json` ya no los duplica._
+
+---
+
+## F2 — Contenido
+
+**Alcance (B.17):** MDX literal de la Parte A §3, expedientes, política y 404.
+**Criterio de salida:** copy idéntico al brief; sin marcadores `{PENDIENTE}` sin registrar.
+
+### Bitácora
+
+- **22.09.2026** — Transcrito el documento completo a MDX, montado el render de Velite, escritas
+  la política y el folio no encontrado, y retirada la página `/sistema` de F1.
+
+### Trabajo realizado
+
+**Capa de contenido**
+- `content/es/documento/`: portada, las siete secciones y el pie, con `orden`, `tipo`, `numeral`,
+  `slug` y `titulo` en el frontmatter. El índice y las secciones leen de aquí: una sola fuente.
+- `content/es/expedientes/`: Essenza (con su diff y la Fig. 1) y el de salud ocupacional,
+  confidencial y sin nombre de cliente.
+- `content/es/legal/politica-de-datos.mdx`, transcrita de `docs/politica-de-datos.md`.
+- `Mdx`: render del cuerpo que compila Velite, con los componentes de B.8 y la tipografía del
+  documento. Corre solo en el servidor.
+
+**Rutas nuevas**
+- `/politica-de-datos`, con su versión y su fecha de vigencia.
+- `[...resto]` + `not-found`: «Folio no encontrado», con el mismo cajetín y enlace al índice.
+  Sin la ruta comodín, `proxy.ts` dejaba salir el 404 genérico de Next, sin idioma ni documento.
+
+**Dos bugs que encontraron las pruebas**
+1. **El tema no sobrevivía a una recarga.** `ScriptTema` escribe `data-tema` antes del primer
+   pintado, pero React es dueño del `<html>` y lo borraba al hidratar, porque ese atributo no
+   venía en el HTML estático. `suppressHydrationWarning` silencia el aviso pero no evita el
+   borrado. Lo arregla `AplicarTema`, que lo repone en un efecto de layout, en el mismo commit:
+   el navegador nunca pinta el tema equivocado.
+2. **Desborde horizontal de 1 px a 390 px.** La retícula usaba `1fr`, cuyo mínimo es el
+   `min-content` del contenido; con tablas y correos largos adentro, la columna crecía más que el
+   viewport. Ahora es `minmax(0, 1fr)`.
+
+### Pruebas
+
+| Suite | Resultado |
+|---|---|
+| `pnpm lint` · `pnpm typecheck` | Limpios |
+| `pnpm test:unit` | **62 en verde** (14 de ellas, de fidelidad del copy) |
+| `pnpm test:e2e` (1440 px y 390 px) | **64 en verde** |
+| `pnpm test:a11y` (axe en `/`, `/politica-de-datos` y el 404, Papel y Plano) | **7 en verde** |
+
+### Verificación del criterio de salida
+
+- [x] **Copy idéntico al brief**, y verificado por una prueba, no a ojo:
+      `tests/unit/copy.test.ts` compara **cada frase** de `content/es/documento` y
+      `content/es/expedientes` contra `docs/brief.md`, y las de `content/es/legal` contra
+      `docs/politica-de-datos.md`. Si alguien inventa, agrega o retoca una frase, la prueba falla
+      y dice cuál. Las tres sustituciones deliberadas (correo, página y revisión del pie, fecha de
+      vigencia) están declaradas en la prueba, con su razón.
+- [x] **Sin `{PENDIENTE}` sin registrar**: los cuatro que quedan están en la tabla de arriba.
+
+### Pendiente de decisión del fundador
+
+1. **Fecha de vigencia de la política** (ver riesgos). Hoy va una provisional.
+2. **Nota al pie 12.** El brief dice «Anexo de seguridad del contrato tipo; ver sección 9».
+   La sección 9 es del brief, no del sitio, así que en la página esa referencia no lleva a
+   ninguna parte. Se dejó literal, porque el copy manda; decidir si se recorta.
+3. **Autorización de Essenza.** El expediente lleva la referencia CSI-2026-ESSENZA-002, que es lo
+   que el build exige. La firma sigue pendiente y bloquea el lanzamiento, no el build.

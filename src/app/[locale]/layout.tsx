@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BotonImprimir } from '@/components/documento/BotonImprimir';
+import { AplicarTema } from '@/components/tema/AplicarTema';
 import { InterruptorPapelPlano } from '@/components/tema/InterruptorPapelPlano';
 import { ScriptTema } from '@/components/tema/ScriptTema';
 import { etiquetaIdioma, routing } from '@/i18n/routing';
@@ -44,10 +45,13 @@ export default async function LayoutRaiz({ children, params }: Props) {
 
   const t = await getTranslations();
 
+  // `suppressHydrationWarning` en el `<html>`: `ScriptTema` escribe `data-tema`
+  // antes de que React hidrate, y sin esto React lo borraría al reconciliar.
   return (
-    <html lang={etiquetaIdioma[locale]} className={claseFuentes}>
+    <html lang={etiquetaIdioma[locale]} className={claseFuentes} suppressHydrationWarning>
       <body>
         <ScriptTema />
+        <AplicarTema />
 
         {/* Sin JavaScript las notas quedan visibles: nunca hay contenido
             atrapado detrás de un botón que no responde. */}
@@ -73,7 +77,7 @@ export default async function LayoutRaiz({ children, params }: Props) {
         </NextIntlClientProvider>
 
         <p className="hoja-pie">
-          {t('sitio.razonSocial')} · {t('sitio.nit')} · {t('base.pendienteCorreo')}
+          {t('sitio.razonSocial')} · {t('sitio.nit')} · {t('sitio.correo')}
         </p>
       </body>
     </html>

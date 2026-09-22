@@ -7,7 +7,8 @@ const etiquetas = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
 const rutas = [
   { nombre: 'documento', ruta: '/' },
-  { nombre: 'sistema', ruta: '/sistema' },
+  { nombre: 'política de datos', ruta: '/politica-de-datos' },
+  { nombre: 'folio no encontrado', ruta: '/folio-que-no-existe' },
 ];
 
 const temas = [

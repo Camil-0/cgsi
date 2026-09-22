@@ -1,0 +1,43 @@
+---
+numero: 1
+titulo: Essenza
+etiqueta: Sistema de operación · Floristería · Next.js · Firebase · WhatsApp
+stack:
+  - Next.js
+  - Firebase
+  - WhatsApp
+slug: essenza
+confidencial: false
+autorizacion: CSI-2026-ESSENZA-002
+---
+
+**Punto de partida:** los pedidos llegaban por WhatsApp. El equipo los anotaba a mano, coordinaba cada pago y calculaba sin datos qué flores comprar cada día.
+
+**Lo que construimos:** una plataforma que digitaliza el proceso de extremo a extremo. Incluye catálogo web con carrito y personalización de cada arreglo, registro de clientes y un panel de operación con vista de producción diaria y desglose de flores por arreglo. Tiene accesos diferenciados para operación y reparto, y envía notificaciones automáticas por WhatsApp en cada cambio de estado del pedido.
+
+**Diff:**
+
+<Diff
+  titulo="Diff"
+  lineas={[
+    { signo: 'quita', texto: 'El pedido llega por WhatsApp y alguien lo copia en un cuaderno.' },
+    { signo: 'agrega', texto: 'El pedido entra al sistema y el cliente recibe confirmación automática.' },
+    { signo: 'quita', texto: 'Cada mañana se calcula a mano qué flores comprar.' },
+    { signo: 'agrega', texto: 'La vista de producción suma las flores de cada arreglo del día.' },
+  ]}
+/>
+
+<FiguraRecorrido
+  titulo="Fig. 1 — Recorrido de un pedido"
+  estados={[
+    'Pedido recibido',
+    'Pago confirmado',
+    'En armado',
+    'En camino',
+    'Entregado',
+  ]}
+/>
+
+**Resultado:** desde marzo de 2026, el 100 % de los pedidos de Essenza se gestiona en la plataforma, que recibe mejoras cada mes.<Nota n={4}>Dato confirmado por escrito por Essenza. Ref. CSI-2026-ESSENZA-002.</Nota>
+
+**Testimonio:** {'{PENDIENTE: testimonio del Anexo 2, aprobado y firmado}'}

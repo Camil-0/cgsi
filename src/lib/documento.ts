@@ -1,19 +1,15 @@
+import type { SeccionDocumento } from '#contenido';
+
 /**
- * Estructura del documento: siete secciones numeradas I–VII (Parte A §3).
- * Los títulos viven en `messages/es.json`; aquí solo la estructura y los anclajes.
+ * El documento son siete secciones numeradas I–VII, más portada y pie
+ * (Parte A §3). La estructura vive en `content/es/documento/*.mdx`.
  */
 
-export const SECCIONES = [
-  { numeral: 'I', ancla: 'punto-de-partida' },
-  { numeral: 'II', ancla: 'alcance' },
-  { numeral: 'III', ancla: 'como-trabajamos' },
-  { numeral: 'IV', ancla: 'expedientes' },
-  { numeral: 'V', ancla: 'inversion' },
-  { numeral: 'VI', ancla: 'lo-que-firmamos' },
-  { numeral: 'VII', ancla: 'proximos-pasos' },
-] as const;
+export const TOTAL_SECCIONES = 7;
 
-export type Seccion = (typeof SECCIONES)[number];
-export type Ancla = Seccion['ancla'];
-
-export const TOTAL_SECCIONES = SECCIONES.length;
+export function porTipo(
+  piezas: readonly SeccionDocumento[],
+  tipo: SeccionDocumento['tipo'],
+): SeccionDocumento[] {
+  return piezas.filter((pieza) => pieza.tipo === tipo).sort((uno, otro) => uno.orden - otro.orden);
+}

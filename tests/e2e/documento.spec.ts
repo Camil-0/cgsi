@@ -20,7 +20,7 @@ test.describe('documento I–VII', () => {
     await page.goto('/');
 
     await expect(page.locator('h1')).toHaveCount(1);
-    await expect(page.locator('main h2')).toHaveCount(7);
+    await expect(page.locator('main section[data-seccion] h2')).toHaveCount(7);
   });
 
   test('el índice lleva a cada ancla', async ({ page }) => {
@@ -52,7 +52,7 @@ test.describe('documento I–VII', () => {
   test('la página del cajetín cambia con el scroll', async ({ page }) => {
     await page.goto('/');
 
-    await page.locator('[data-seccion="IV"]').scrollIntoViewIfNeeded();
+    await page.locator('.indice-enlace[data-numeral="IV"]').click();
 
     await expect(page.locator('.cajetin')).toContainText('Pág. IV/VII');
     await expect(page.locator('.indice-enlace[data-numeral="IV"]')).toHaveAttribute(
@@ -123,7 +123,7 @@ test.describe('notas de fundamento', () => {
   test('en escritorio la nota se lee sin abrir nada; en móvil se abre con teclado', async ({
     page,
   }) => {
-    await page.goto('/sistema');
+    await page.goto('/');
 
     const boton = page.locator('.nota-llamada').first();
     const cuerpo = page.locator('.nota-cuerpo').first();
@@ -151,7 +151,7 @@ test.describe('notas de fundamento', () => {
 
 test.describe('diff de procesos', () => {
   test('nunca comunica solo con color: lleva signos y semántica', async ({ page }) => {
-    await page.goto('/sistema');
+    await page.goto('/');
 
     await expect(page.locator('.diff del')).toHaveCount(2);
     await expect(page.locator('.diff ins')).toHaveCount(2);

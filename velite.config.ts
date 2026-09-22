@@ -16,6 +16,8 @@ const documento = defineCollection({
   pattern: 'es/documento/**/*.mdx',
   schema: s.object({
     orden: s.number().int(),
+    tipo: s.enum(['portada', 'seccion', 'pie']),
+    /** Numeral romano I–VII. Vacío en la portada y en el pie. */
     numeral: s.string(),
     titulo: s.string(),
     slug: s.slug('documento'),

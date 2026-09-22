@@ -2,16 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { SECCIONES } from '@/lib/documento';
 
 type Props = {
   /** Versión semántica de package.json, inyectada en el build */
   revision: string;
   /** Fecha del build en dd.mm.aaaa */
   fecha: string;
+  /** Numeral que se muestra antes del primer scroll */
+  numeralInicial: string;
 };
-
-const PRIMERA = SECCIONES[0].numeral;
 
 /**
  * Cajetín vivo (B.5 y Parte A §4.1).
@@ -20,8 +19,8 @@ const PRIMERA = SECCIONES[0].numeral;
  * de paso, marca la sección actual en el índice (que es de servidor y por eso no
  * puede observar nada por su cuenta).
  */
-export function Cajetin({ revision, fecha }: Props) {
-  const [numeral, setNumeral] = useState<string>(PRIMERA);
+export function Cajetin({ revision, fecha, numeralInicial }: Props) {
+  const [numeral, setNumeral] = useState<string>(numeralInicial);
   const t = useTranslations('documento.cajetin');
 
   useEffect(() => {
