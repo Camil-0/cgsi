@@ -629,3 +629,22 @@ de Google y de schema.org piden una **URL pública**. Lo que se puede verificar 
 está verificado con pruebas: tipos, campos obligatorios, coherencia con la página y ausencia de lo
 que el brief prohíbe. Falta pasar el validador oficial cuando el sitio esté en un dominio
 (`TODO.md`, puntos 2 y 7). También faltan los primeros memorandos, que son contenido de Camilo.
+
+---
+
+## Primer despliegue en Vercel — 22.09.2026
+
+**Qué falló.** El build se cayó al prerenderizar `/robots.txt`: `env.ts` rechazaba
+`NEXT_PUBLIC_SITE_URL`, `WHATSAPP_NUMERO`, `CAL_LINK` y las dos de PostHog. Las cuatro últimas
+son opcionales, así que no faltaban: estaban **declaradas vacías** (se copió `.env.example` tal
+cual). Para Zod, `""` no es «ausente» y `.optional()` no lo cubre.
+
+**Qué cambió en `src/lib/env.ts`:**
+
+- Una variable vacía cuenta como ausente, en el entorno público y en el del servidor.
+- Si `NEXT_PUBLIC_SITE_URL` no está, se usa `https://` + `NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL`,
+  que Vercel expone solo. Es un puente mientras no haya dominio propio (`TODO.md`, punto 2): la
+  canónica, el sitemap y el robots apuntan a `*.vercel.app` hasta entonces. La declarada manda.
+
+Cuatro pruebas nuevas en `tests/unit/env.test.ts`. Build simulado con todas las variables vacías:
+en verde, y `robots.txt` apunta a la URL de Vercel.

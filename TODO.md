@@ -129,7 +129,9 @@ secundario, solo para avisarte a ti de cada cita.
 
 1. Importar el repositorio en Vercel. El proyecto está en la **raíz**, no hay que tocar el
    *root directory*.
-2. Cargar todas las variables de `.env.example` en **Production** y en **Preview**.
+2. Cargar en **Production** y en **Preview** las variables de `.env.example` **que tengan valor**.
+   Las vacías cuentan como ausentes. Sin `NEXT_PUBLIC_SITE_URL`, el sitio usa la URL
+   `*.vercel.app` de producción hasta que se conecte el dominio.
 3. Conectar el dominio del punto 2.
 4. Activar **Web Analytics** y **Speed Insights** (los dos sin cookies).
 5. **No activar despliegue automático a producción** hasta que F6 esté cerrada y tú lo apruebes

@@ -41,6 +41,40 @@ describe('parsearEntornoPublico', () => {
       parsearEntornoPublico({ ...publicoValido, NEXT_PUBLIC_WHATSAPP_NUMERO: '+57 323 813 4588' }),
     ).toThrow(/NEXT_PUBLIC_WHATSAPP_NUMERO/);
   });
+
+  it('trata como ausentes las variables declaradas vacías', () => {
+    const env = parsearEntornoPublico({
+      ...publicoValido,
+      NEXT_PUBLIC_WHATSAPP_NUMERO: '',
+      NEXT_PUBLIC_CAL_LINK: '',
+      NEXT_PUBLIC_POSTHOG_KEY: '',
+      NEXT_PUBLIC_POSTHOG_HOST: '',
+    });
+
+    expect(env.NEXT_PUBLIC_WHATSAPP_NUMERO).toBeUndefined();
+    expect(env.NEXT_PUBLIC_CAL_LINK).toBeUndefined();
+    expect(env.NEXT_PUBLIC_POSTHOG_KEY).toBeUndefined();
+    expect(env.NEXT_PUBLIC_POSTHOG_HOST).toBeUndefined();
+  });
+
+  it('sin URL del sitio, usa la URL de producción que expone Vercel', () => {
+    const env = parsearEntornoPublico({
+      ...publicoValido,
+      NEXT_PUBLIC_SITE_URL: '',
+      NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL: 'cgsi.vercel.app',
+    });
+
+    expect(env.NEXT_PUBLIC_SITE_URL).toBe('https://cgsi.vercel.app');
+  });
+
+  it('la URL del sitio declarada manda sobre la de Vercel', () => {
+    const env = parsearEntornoPublico({
+      ...publicoValido,
+      NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL: 'cgsi.vercel.app',
+    });
+
+    expect(env.NEXT_PUBLIC_SITE_URL).toBe('https://cgsi.example');
+  });
 });
 
 describe('parsearEntornoServidor', () => {
@@ -77,5 +111,17 @@ describe('parsearEntornoServidor', () => {
 
   it('usa 1.0 como versión de la política cuando no se declara', () => {
     expect(parsearEntornoServidor({}).POLITICA_VERSION).toBe('1.0');
+  });
+
+  it('trata como ausentes las variables declaradas vacías', () => {
+    const env = parsearEntornoServidor({
+      MENSAJERIA_PROVEEDOR: '',
+      FIREBASE_CLIENT_EMAIL: '',
+      POLITICA_VERSION: '',
+    });
+
+    expect(env.MENSAJERIA_PROVEEDOR).toBe('ninguno');
+    expect(env.FIREBASE_CLIENT_EMAIL).toBeUndefined();
+    expect(env.POLITICA_VERSION).toBe('1.0');
   });
 });

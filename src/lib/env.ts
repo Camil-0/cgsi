@@ -77,13 +77,33 @@ function fallar(ambito: string, error: z.ZodError): never {
   throw new Error(`Entorno ${ambito} inválido — ${detalle}`);
 }
 
+/**
+ * Una variable declarada vacía (`CLAVE=`) cuenta como ausente. Así, copiar
+ * `.env.example` tal cual en Vercel no rompe las variables opcionales.
+ */
+function sinVacias(fuente: Fuente): Fuente {
+  return Object.fromEntries(
+    Object.entries(fuente).map(([clave, valor]) => [clave, valor?.trim() ? valor : undefined]),
+  );
+}
+
+/**
+ * Mientras no haya dominio propio, la URL del sitio sale de la de producción que
+ * Vercel expone sola (sin protocolo). La declarada siempre manda.
+ */
+function conUrlDelSitio(fuente: Fuente): Fuente {
+  const deVercel = fuente.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL;
+  if (fuente.NEXT_PUBLIC_SITE_URL || !deVercel) return fuente;
+  return { ...fuente, NEXT_PUBLIC_SITE_URL: `https://${deVercel}` };
+}
+
 export function parsearEntornoPublico(fuente: Fuente): EntornoPublico {
-  const resultado = esquemaPublico.safeParse(fuente);
+  const resultado = esquemaPublico.safeParse(conUrlDelSitio(sinVacias(fuente)));
   return resultado.success ? resultado.data : fallar('público', resultado.error);
 }
 
 export function parsearEntornoServidor(fuente: Fuente): EntornoServidor {
-  const resultado = esquemaServidor.safeParse(fuente);
+  const resultado = esquemaServidor.safeParse(sinVacias(fuente));
   return resultado.success ? resultado.data : fallar('del servidor', resultado.error);
 }
 
@@ -102,6 +122,8 @@ export const entornoPublico = memorizar(() =>
     NEXT_PUBLIC_CAL_LINK: process.env.NEXT_PUBLIC_CAL_LINK,
     NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
     NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+    NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL:
+      process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL,
   }),
 );
 
