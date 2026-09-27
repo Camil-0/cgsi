@@ -1,0 +1,102 @@
+{
+  "sitio": {
+    "nombre": "CG Software Integration",
+    "razonSocial": "CG Software Integration S.A.S.",
+    "referencia": "Ref. CSI-2026-WEB-001",
+    "nit": "NIT 901.983.287",
+    "ciudad": "Bogotá D.C.",
+    "correo": "cgsoftwareintegrations@gmail.com"
+  },
+  "documento": {
+    "saltarAlContenido": "Saltar al contenido",
+    "indice": "Índice del documento",
+    "descargarPdf": "Descargar como PDF",
+    "politicaEnlace": "Política de tratamiento de datos",
+    "cajetin": {
+      "etiqueta": "Datos del documento",
+      "texto": "Ref. CSI-2026-WEB-001 · Rev. {revision} · {fecha} · Pág. {pagina}/VII"
+    },
+    "destinatario": {
+      "para": "Para",
+      "de": "De"
+    },
+    "nota": {
+      "llamada": "Nota {n}"
+    },
+    "firma": {
+      "nombre": "Camilo Charris C.",
+      "cargo": "Fundador, CG Software Integration"
+    }
+  },
+  "contacto": {
+    "agendar": "Agendar diagnóstico",
+    "agendarMicrocopy": "30 minutos · sin costo",
+    "whatsapp": "Escribir por WhatsApp",
+    "whatsappTexto": "Hola, vengo del sitio de CGSI y quiero agendar un diagnóstico",
+    "cargarAgenda": "Cargar la agenda",
+    "tituloAgenda": "Agenda de diagnóstico",
+    "sello": "Recibido · {cuando} COT · Te escribimos en menos de una hora hábil"
+  },
+  "cookies": {
+    "titulo": "Cookies de este sitio",
+    "resumen": "Usamos cookies para recordar tus preferencias y para entender cómo se usa el sitio. Tú decides cuáles.",
+    "intro": "Cada categoría se enciende y se apaga por separado. Puedes cambiar esto cuando quieras desde el pie del sitio.",
+    "verPolitica": "Leer la política de datos",
+    "aceptarTodo": "Aceptar todo",
+    "configurar": "Configuración",
+    "configurarPie": "Configurar cookies",
+    "rechazarTodo": "Rechazar todo",
+    "guardarSeleccion": "Guardar mi selección",
+    "siempreActiva": "Siempre activa.",
+    "categorias": {
+      "necesarias": {
+        "nombre": "Necesarias",
+        "detalle": "Recordar tu propia decisión sobre cookies. Sin ellas no podríamos recordar que dijiste que no."
+      },
+      "preferencias": {
+        "nombre": "Preferencias",
+        "detalle": "Recordar si prefieres la vista Papel o la vista Plano. Si la apagas, el tema dura lo que dure la pestaña."
+      },
+      "analitica": {
+        "nombre": "Analítica",
+        "detalle": "Entender qué páginas se leen, de dónde llegas y en qué dispositivo. La hacen PostHog y Vercel. Mientras no la autorices, no se descarga su código."
+      },
+      "grabacion": {
+        "nombre": "Grabación de sesión",
+        "detalle": "Reproducir la navegación para ver dónde se traba el sitio. Lo que escribes en los formularios va enmascarado y no se graba."
+      }
+    }
+  },
+  "pie": {
+    "medida": "Esta página pesó {kb} KB y cargó en {segundos} s en tu conexión.",
+    "desdeCache": "Esta página se sirvió desde caché."
+  },
+  "expedientes": {
+    "encabezado": "Expediente {numero} — {titulo}",
+    "lista": "Expedientes"
+  },
+  "memorandos": {
+    "titulo": "Memorandos",
+    "numero": "Memorando N.º {numero}",
+    "asunto": "Asunto",
+    "fecha": "Fecha",
+    "volver": "Volver a los memorandos",
+    "inicio": "Documento"
+  },
+  "legal": {
+    "vigencia": "Versión {version} · Vigente desde {fecha}"
+  },
+  "folio": {
+    "titulo": "Folio no encontrado",
+    "volver": "Volver al índice"
+  },
+  "tema": {
+    "vistaPlano": "Vista Plano"
+  },
+  "base": {
+    "pendienteAgenda": "'{'PENDIENTE: enlace del evento de Cal.com — ver TODO.md, punto 3'}'",
+    "pendienteMensajes": "'{'PENDIENTE: mensajes de WhatsApp por estado — Parte A §3, IV'}'",
+    "pendientePolitica": "'{'PENDIENTE: validación por abogado — Parte A §11'}'",
+    "pendienteMemorandos": "'{'PENDIENTE: los primeros memorandos — Parte A §5 y §9'}'"
+  }
+}

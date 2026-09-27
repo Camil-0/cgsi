@@ -1,0 +1,452 @@
+{
+  "proyecto": "cgsi-web",
+  "tipo": "sitio",
+  "estado": "en-desarrollo",
+  "fecha_extraccion": "2026-09-27",
+  "stack": {
+    "next": "16.3.5",
+    "react": "19.3.0",
+    "typescript": "5.9.3",
+    "datos": "firestore",
+    "auth": "otro",
+    "hosting": "vercel",
+    "gestor_paquetes": "pnpm"
+  },
+  "candidatos": [
+    {
+      "id": "booking.scheduling",
+      "nombre": "Verificación HMAC y esquema Zod del webhook de Cal.com",
+      "clase": "A",
+      "archivos": [
+        "src/lib/cal.ts",
+        "src/lib/fechas.ts"
+      ],
+      "deps": [
+        "zod@4.6.5"
+      ],
+      "env": [],
+      "tests": true,
+      "confianza": "alta"
+    },
+    {
+      "id": "booking.scheduling",
+      "nombre": "Embed de Cal.com diferido por clic o proximidad",
+      "clase": "A",
+      "archivos": [
+        "src/components/contacto/Agenda.tsx",
+        "src/components/contacto/AgendaCal.tsx",
+        "src/components/contacto/EmbebidoCal.tsx"
+      ],
+      "deps": [
+        "@calcom/embed-react@1.5.3",
+        "next-intl@4.14.6"
+      ],
+      "env": [
+        "NEXT_PUBLIC_CAL_LINK"
+      ],
+      "tests": true,
+      "confianza": "alta"
+    },
+    {
+      "id": "booking.scheduling",
+      "nombre": "Endpoint POST /api/cal/webhook (firma, Zod, idempotencia, aviso)",
+      "clase": "B",
+      "archivos": [
+        "src/app/api/cal/webhook/route.ts"
+      ],
+      "deps": [
+        "zod@4.6.5",
+        "firebase-admin@14.4.0"
+      ],
+      "env": [
+        "CAL_WEBHOOK_SECRET",
+        "FIREBASE_PROJECT_ID",
+        "FIREBASE_CLIENT_EMAIL",
+        "FIREBASE_PRIVATE_KEY",
+        "MENSAJERIA_PROVEEDOR",
+        "NOTIFICACIONES_DESTINO"
+      ],
+      "tests": true,
+      "confianza": "media"
+    },
+    {
+      "id": "site.forms",
+      "nombre": "Registro de prospectos desde Cal.com con consentimiento y TTL de 24 meses",
+      "clase": "B",
+      "archivos": [
+        "src/lib/prospectos.ts"
+      ],
+      "deps": [
+        "firebase-admin@14.4.0",
+        "server-only@0.0.1"
+      ],
+      "env": [
+        "FIREBASE_PROJECT_ID",
+        "FIREBASE_CLIENT_EMAIL",
+        "FIREBASE_PRIVATE_KEY",
+        "POLITICA_VERSION"
+      ],
+      "tests": false,
+      "confianza": "media"
+    },
+    {
+      "id": "otro.privacidad",
+      "nombre": "Consentimiento de cookies por categoría, versionado por política y con vencimiento",
+      "clase": "A",
+      "archivos": [
+        "src/lib/consentimiento.ts",
+        "src/lib/politica.ts",
+        "src/components/consentimiento/AvisoCookies.tsx",
+        "src/components/consentimiento/BotonConfigurarCookies.tsx",
+        "src/components/consentimiento/useConsentimiento.ts",
+        "src/components/contacto/AvisoPrivacidad.tsx"
+      ],
+      "deps": [
+        "react@19.3.0",
+        "next-intl@4.14.6"
+      ],
+      "env": [],
+      "tests": true,
+      "confianza": "alta"
+    },
+    {
+      "id": "otro.privacidad",
+      "nombre": "Scripts de consulta y supresión del titular (Ley 1581 de 2012)",
+      "clase": "B",
+      "archivos": [
+        "scripts/prospectos-exportar.ts",
+        "scripts/prospectos-suprimir.ts"
+      ],
+      "deps": [
+        "firebase-admin@14.4.0"
+      ],
+      "env": [
+        "FIREBASE_PROJECT_ID",
+        "FIREBASE_CLIENT_EMAIL",
+        "FIREBASE_PRIVATE_KEY"
+      ],
+      "tests": false,
+      "confianza": "media"
+    },
+    {
+      "id": "analytics",
+      "nombre": "PostHog y Vercel Analytics/Speed Insights condicionados al consentimiento",
+      "clase": "A",
+      "archivos": [
+        "src/components/analitica/Analitica.tsx"
+      ],
+      "deps": [
+        "posthog-js@1.434.8",
+        "@vercel/analytics@2.0.1",
+        "@vercel/speed-insights@2.0.0"
+      ],
+      "env": [
+        "NEXT_PUBLIC_POSTHOG_KEY",
+        "NEXT_PUBLIC_POSTHOG_HOST"
+      ],
+      "tests": true,
+      "confianza": "alta"
+    },
+    {
+      "id": "comms.whatsapp",
+      "nombre": "Adaptador de mensajería con proveedores intercambiables y tope de tiempo",
+      "clase": "A",
+      "archivos": [
+        "src/lib/mensajeria/index.ts",
+        "src/lib/mensajeria/evolution.ts",
+        "src/lib/mensajeria/cloud-api.ts",
+        "src/lib/mensajeria/ninguno.ts"
+      ],
+      "deps": [
+        "server-only@0.0.1"
+      ],
+      "env": [
+        "MENSAJERIA_PROVEEDOR",
+        "EVOLUTION_API_URL",
+        "EVOLUTION_API_KEY",
+        "EVOLUTION_INSTANCIA",
+        "NOTIFICACIONES_DESTINO",
+        "WHATSAPP_PHONE_NUMBER_ID",
+        "WHATSAPP_TOKEN"
+      ],
+      "tests": true,
+      "confianza": "media"
+    },
+    {
+      "id": "comms.whatsapp",
+      "nombre": "Botón wa.me con texto prellenado, sin API",
+      "clase": "A",
+      "archivos": [
+        "src/components/contacto/BotonWhatsApp.tsx"
+      ],
+      "deps": [
+        "next-intl@4.14.6"
+      ],
+      "env": [
+        "NEXT_PUBLIC_WHATSAPP_NUMERO"
+      ],
+      "tests": true,
+      "confianza": "alta"
+    },
+    {
+      "id": "core.ui",
+      "nombre": "Tokens de color en variables CSS expuestos con @theme de Tailwind v4, dos temas",
+      "clase": "A",
+      "archivos": [
+        "src/styles/tokens.css",
+        "src/styles/globals.css",
+        "src/lib/fuentes.ts"
+      ],
+      "deps": [
+        "tailwindcss@4.3.3",
+        "@tailwindcss/postcss@4.3.3"
+      ],
+      "env": [],
+      "tests": true,
+      "confianza": "alta"
+    },
+    {
+      "id": "core.ui",
+      "nombre": "Tema claro/oscuro sin parpadeo, persistido solo con consentimiento",
+      "clase": "A",
+      "archivos": [
+        "src/components/tema/ScriptTema.tsx",
+        "src/components/tema/AplicarTema.tsx",
+        "src/components/tema/InterruptorPapelPlano.tsx"
+      ],
+      "deps": [
+        "react@19.3.0",
+        "next-intl@4.14.6"
+      ],
+      "env": [],
+      "tests": true,
+      "confianza": "alta"
+    },
+    {
+      "id": "core.ui",
+      "nombre": "Componentes accesibles: Nota, Diff, PestanasExpediente, BotonImprimir, MedidorCarga",
+      "clase": "A",
+      "archivos": [
+        "src/components/documento/Nota.tsx",
+        "src/components/documento/Diff.tsx",
+        "src/components/documento/BotonImprimir.tsx",
+        "src/components/expedientes/PestanasExpediente.tsx",
+        "src/components/pie/MedidorCarga.tsx"
+      ],
+      "deps": [
+        "react@19.3.0",
+        "next-intl@4.14.6"
+      ],
+      "env": [],
+      "tests": true,
+      "confianza": "media"
+    },
+    {
+      "id": "site.motion",
+      "nombre": "GSAP diferido con puerta de movimiento reducido y registro único de plugins",
+      "clase": "A",
+      "archivos": [
+        "src/lib/gsap.ts",
+        "src/components/movimiento/Movimiento.tsx",
+        "src/components/movimiento/ScriptMovimiento.tsx",
+        "src/components/movimiento/Animaciones.tsx",
+        "src/components/documento/DobleFilete.tsx"
+      ],
+      "deps": [
+        "gsap@3.15.0",
+        "@gsap/react@2.1.2"
+      ],
+      "env": [],
+      "tests": true,
+      "confianza": "media"
+    },
+    {
+      "id": "site.seo",
+      "nombre": "Constructores JSON-LD, canónica/hreflang, imagen OG y robots",
+      "clase": "A",
+      "archivos": [
+        "src/lib/seo.ts",
+        "src/lib/extraer.ts",
+        "src/lib/og.ts",
+        "src/components/seo/JsonLd.tsx",
+        "src/components/seo/LienzoOg.tsx",
+        "src/app/[locale]/opengraph-image.tsx",
+        "src/app/robots.ts"
+      ],
+      "deps": [
+        "next@16.3.5"
+      ],
+      "env": [
+        "NEXT_PUBLIC_SITE_URL",
+        "GOOGLE_SITE_VERIFICATION",
+        "BING_SITE_VERIFICATION"
+      ],
+      "tests": true,
+      "confianza": "alta"
+    },
+    {
+      "id": "site.blog",
+      "nombre": "Memorandos: listado, detalle con BlogPosting, sitemap y RSS",
+      "clase": "B",
+      "archivos": [
+        "src/app/sitemap.ts",
+        "src/app/rss.xml/route.ts",
+        "src/app/[locale]/memorandos/page.tsx",
+        "src/app/[locale]/memorandos/[slug]/page.tsx"
+      ],
+      "deps": [
+        "velite@0.4.0",
+        "next-intl@4.14.6"
+      ],
+      "env": [
+        "NEXT_PUBLIC_SITE_URL"
+      ],
+      "tests": true,
+      "confianza": "media"
+    },
+    {
+      "id": "site.content",
+      "nombre": "Colecciones Velite con reglas de build y render de MDX",
+      "clase": "B",
+      "archivos": [
+        "velite.config.ts",
+        "src/components/documento/Mdx.tsx"
+      ],
+      "deps": [
+        "velite@0.4.0"
+      ],
+      "env": [],
+      "tests": false,
+      "confianza": "baja"
+    },
+    {
+      "id": "i18n",
+      "nombre": "next-intl con proxy.ts, español sin prefijo y 404 localizado",
+      "clase": "A",
+      "archivos": [
+        "src/proxy.ts",
+        "src/i18n/routing.ts",
+        "src/i18n/request.ts",
+        "src/i18n/navigation.ts",
+        "src/app/[locale]/[...resto]/page.tsx",
+        "messages/es.json"
+      ],
+      "deps": [
+        "next-intl@4.14.6"
+      ],
+      "env": [],
+      "tests": true,
+      "confianza": "alta"
+    },
+    {
+      "id": "infra.env",
+      "nombre": "Entorno validado con Zod, perezoso y memorizado, más versión y fecha de build inyectadas",
+      "clase": "A",
+      "archivos": [
+        "src/lib/env.ts",
+        "src/lib/version.ts",
+        "next.config.ts"
+      ],
+      "deps": [
+        "zod@4.6.5"
+      ],
+      "env": [
+        "NEXT_PUBLIC_SITE_URL",
+        "NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL"
+      ],
+      "tests": true,
+      "confianza": "alta"
+    },
+    {
+      "id": "infra.observability",
+      "nombre": "Healthcheck /api/salud que informa integraciones sin filtrar valores",
+      "clase": "B",
+      "archivos": [
+        "src/app/api/salud/route.ts"
+      ],
+      "deps": [],
+      "env": [],
+      "tests": true,
+      "confianza": "alta"
+    },
+    {
+      "id": "infra.ci",
+      "nombre": "GitHub Actions (lint, typecheck, unit, build, e2e, a11y, audit) y Dependabot",
+      "clase": "A",
+      "archivos": [
+        ".github/workflows/ci.yml",
+        ".github/dependabot.yml",
+        ".nvmrc"
+      ],
+      "deps": [],
+      "env": [],
+      "tests": false,
+      "confianza": "media"
+    },
+    {
+      "id": "infra.testing",
+      "nombre": "Guardas de tokens y contraste WCAG, presupuesto de JS, axe en dos temas",
+      "clase": "A",
+      "archivos": [
+        "vitest.config.ts",
+        "playwright.config.ts",
+        "eslint.config.mjs",
+        "tests/utiles/playwright.ts",
+        "tests/utiles/server-only-vacio.ts",
+        "tests/unit/tokens.test.ts",
+        "tests/unit/contraste.test.ts",
+        "tests/e2e/presupuesto.spec.ts",
+        "tests/a11y/portada.spec.ts"
+      ],
+      "deps": [
+        "vitest@5.0.1",
+        "@playwright/test@1.63.0",
+        "@axe-core/playwright@4.13.0",
+        "eslint@9.39.5",
+        "eslint-config-next@16.3.5"
+      ],
+      "env": [],
+      "tests": true,
+      "confianza": "alta"
+    },
+    {
+      "id": "dev.agent-docs",
+      "nombre": "CLAUDE.md, PROGRESS.md y TODO.md como plantilla de trabajo por fases",
+      "clase": "A",
+      "archivos": [
+        "CLAUDE.md",
+        "PROGRESS.md",
+        "TODO.md"
+      ],
+      "deps": [],
+      "env": [],
+      "tests": false,
+      "confianza": "alta"
+    }
+  ],
+  "integraciones": [
+    "cal.com",
+    "firestore",
+    "evolution-api",
+    "meta-whatsapp-cloud-api",
+    "posthog",
+    "vercel-analytics",
+    "vercel-speed-insights",
+    "google-fonts"
+  ],
+  "no_verificado": [
+    "PROYECTO=cgsi-web lo infirió el agente: el usuario confirmó TIPO y ESTADO, no el slug",
+    "stack.auth=otro: el sitio no tiene autenticación de ningún tipo",
+    "stack.hosting=vercel es el objetivo documentado en TODO.md §7; nunca se ha desplegado",
+    "Ninguna integración se ha probado contra el servicio real (Cal.com, Firestore, Evolution, PostHog, Vercel): faltan credenciales",
+    "Si Cal.com reagenda con uid nuevo (rescheduleUid), BOOKING_RESCHEDULED crea un prospecto sin nombre, correo ni consentimiento",
+    "Formato real de x-cal-signature-256 contra una cuenta de Cal.com",
+    "Ruta POST /message/sendText/{instancia} contra la versión desplegada de Evolution API",
+    "Que void avisar() termine después de responder en Vercel (sin after())",
+    "Que exista la política TTL sobre prospectos.expiraEn (se configura en consola)",
+    "Que el TTL de Firestore deje huérfana la subcolección eventos en un proyecto real",
+    "Que el workflow de CI haya corrido alguna vez en GitHub (TODO.md §1 dice que no hay remoto, pero sí lo hay)",
+    "pnpm build, e2e y a11y no se corrieron en esta extracción; typecheck, lint y 121 pruebas unitarias sí pasaron, pero en Node 22.22.2 y no en el Node 24 que pide el repo",
+    "Validador oficial de datos estructurados de Google (necesita una URL pública)"
+  ]
+}
